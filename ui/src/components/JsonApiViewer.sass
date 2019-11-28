@@ -1,0 +1,76 @@
+.component-api
+  &__container
+    max-height: 600px
+
+  &__list
+    max-height: 600px
+    min-height: 600px
+
+    &-item
+      border-top: 1px solid lightblue !important
+
+  &__row
+    padding: 8px 16px 4px
+    font-weight: 300
+    color: #757575
+
+    &--bordered
+      border-radius: 5px
+      border: lightblue 1px solid
+      padding: 4px 8px 4px 16px
+
+    &--item
+      padding-bottom: 5px
+
+    &--label
+      font-size: 0.75rem
+      font-weight: 400
+      line-height: 1.25rem
+      letter-spacing: 0.03333em
+
+    &--value
+      font-weight: 400
+      color: #000
+
+    &--values
+      font-weight: 400
+      color: #000
+      padding-left: 16px
+
+    &--example
+      font-weight: 400
+      color: #000
+      padding-left: 16px
+      display: inline-block
+
+.property-name
+  font-size: 14px
+  line-height: 14px
+
+.component-api__row.component-api__row--bordered.row + .component-api__row.component-api__row--bordered.row
+  margin-top: 4px
+
+.body--dark, .q-dark
+  .component-api
+
+    &__list
+      &-item
+        border-top: 1px solid lightblue !important
+
+    &__row
+      color: #fff
+
+      &--label
+        color: #ffff00
+
+      &--bordered
+        border: lightblue 1px solid
+
+      &--value
+        color: #fff
+
+      &--values
+        color: #fff
+
+      &--example
+        color: #fff
