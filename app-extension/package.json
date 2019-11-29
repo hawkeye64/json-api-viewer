@@ -12,8 +12,8 @@
   "bugs": "",
   "homepage": "",
   "dependencies": {
-    "@quasar/quasar-ui-qmarkdown": "^1.0.5",
-    "@quasar/quasar-ui-qribbon": "^1.0.0-beta.11",
+    "@quasar/quasar-ui-qmarkdown": "^1.0.6",
+    "@quasar/quasar-ui-qribbon": "^1.0.0-beta.14",
     "quasar-ui-json-api-viewer": "^0.0.6"
   },
   "engines": {
