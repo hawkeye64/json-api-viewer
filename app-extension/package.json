@@ -1,6 +1,6 @@
 {
   "name": "quasar-app-extension-json-api-viewer",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A Quasar App Extension for viewing JSON API",
   "author": "Jeff Galbraith <jeff@quasar.dev>",
   "license": "MIT",
@@ -14,7 +14,7 @@
   "dependencies": {
     "@quasar/quasar-ui-qmarkdown": "^1.0.6",
     "@quasar/quasar-ui-qribbon": "^1.0.0-beta.14",
-    "quasar-ui-json-api-viewer": "^0.0.7"
+    "quasar-ui-json-api-viewer": "^0.0.8"
   },
   "engines": {
     "node": ">= 8.9.0",

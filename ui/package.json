@@ -1,6 +1,6 @@
 {
   "name": "quasar-ui-json-api-viewer",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "Jeff Galbraith <jeff@quasar.dev>",
   "description": "Display your Quasar JSON API",
   "license": "MIT",
