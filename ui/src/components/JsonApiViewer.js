@@ -6,14 +6,17 @@ import JsonApiList from './JsonApiList'
 import {
   QBadge,
   QCard,
+  QIcon,
+  QInput,
+  QSeparator,
+  QSpace,
   QTabs,
   QTab,
   QTabPanels,
   QTabPanel,
   QToolbar,
   QToolbarTitle,
-  QSpace,
-  QSeparator
+  extend
 } from 'quasar'
 
 import {
@@ -48,8 +51,8 @@ export default {
       currentInnerTab: 'model',
       api: void 0,
       filteredApi: void 0,
+      filter: '',
       tabs: [],
-      innerTabs: {},
       tabCount: {},
       innerTabCount: {},
       innerTabContent: {},
@@ -73,13 +76,22 @@ export default {
     }
   },
 
+  watch: {
+    filter (val) {
+      this.__parseJson(this.json)
+    }
+  },
+
   methods: {
-    __parseJson ({ ...api }) {
-      if (api === void 0) {
+    __parseJson (json) {
+      if (json === void 0) {
         // no api
         this.ready = true
         return
       }
+
+      // deep copy object
+      const api = extend(true, {}, json)
 
       if (api.type !== void 0) {
         delete api.type
@@ -89,36 +101,127 @@ export default {
         delete api.meta
       }
 
-      // get a count of items within each top-level tab menu
-      const keys = Object.keys(api)
-      for (let i = 0; i < keys.length; ++i) {
-        const propKey = keys[i]
-        this.$set(this.tabs, propKey, Object.keys(api[propKey]).length)
-      }
+      this.__resetFiltered()
 
       // deal with "props"
       if (api.props !== void 0) {
-        const keys = Object.keys(api.props)
-        for (let j = 0; j < keys.length; ++j) {
-          const key = keys[j]
+        // get sorted keys
+        const propKeys = Object.keys(api.props).sort()
+
+        // loop through keys to get inner tab content
+        for (let j = 0; j < propKeys.length; ++j) {
+          const key = propKeys[j]
           const props = api.props[key]
           if (this.innerTabContent[props.category] === void 0) {
             this.$set(this.innerTabContent, props.category, {})
           }
-          this.$set(this.innerTabContent[props.category], key, { ...props })
+          const apiProps = this.__filterContent(props)
+          if (Object.keys(apiProps).length > 0) {
+            this.$set(this.innerTabContent[props.category], key, apiProps)
+          }
+          else {
+            delete api.props[key]
+          }
         }
 
         this.$set(this, 'innerTabCount', {})
         const innerKeys = Object.keys(this.innerTabContent)
         for (let k = 0; k < innerKeys.length; ++k) {
-          const propKey = innerKeys[k]
-          this.$set(this.innerTabCount, propKey, Object.keys(this.innerTabContent[propKey]).length)
+          const innerPropKey = innerKeys[k]
+          this.$set(this.innerTabCount, innerPropKey, Object.keys(this.innerTabContent[innerPropKey]).length)
         }
+      }
+
+      this.__filterTopLevel(api)
+
+      // get a count of items within each top-level tab menu
+      const keys = Object.keys(api)
+      for (let i = 0; i < keys.length; ++i) {
+        const type = keys[i]
+        this.$set(this.tabs, type, Object.keys(api[type]).length)
       }
 
       this.filteredApi = api
 
       this.ready = true
+    },
+
+    __filterTopLevel (api) {
+      const keys = Object.keys(api)
+      for (let i = 0; i < keys.length; ++i) {
+        const type = keys[i]
+        if (type !== 'props') {
+          // loop through inner content
+          const propKeys = Object.keys(api[type])
+          for (let l = 0; l < propKeys.length; ++l) {
+            const props = api[type][propKeys[l]]
+            const apiProps = this.__filterContent(props)
+            if (Object.keys(apiProps).length === 0) {
+              delete api[type][propKeys[l]]
+            }
+          }
+        }
+      }
+    },
+
+    __filterContent (api) {
+      if (this.filter === '') {
+        return api
+      }
+
+      let found = false
+      const keys = Object.keys(api)
+      for (let i = 0; i < keys.length; ++i) {
+        const prop = api[keys[i]]
+        const type = Object.prototype.toString.call(prop)
+        if ('[object Array]' === type) {
+          if (this.__filterArray(prop)) {
+            found = true
+            break
+          }
+        }
+        else if ('[object String]' === type || '[object Number]' === type) {
+          if (this.__filterString(prop)) {
+            found = true
+            break
+          }
+        }
+      }
+
+      if (found !== true) {
+        return {}
+      }
+
+      return api
+    },
+
+    // tests the passed string against the filter
+    __filterString (str) {
+      return String(str).toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
+    },
+
+    __filterArray (arr) {
+      for (let i = 0; i < arr.length; ++i) {
+        if (this.__filterString(arr[i]) === true) {
+          return true
+        }
+      }
+      return false
+    },
+
+    __resetFiltered () {
+      this.$set(this, 'innerTabContent', {})
+      this.$set(this, 'innerTabCount', {})
+      this.$set(this, 'tabCount', {})
+      this.$set(this, 'tabs', [])
+    },
+
+    __onFilter () {
+      if (this.filter !== '') {
+        this.filter = ''
+      }
+
+      this.$refs.input.focus()
     },
 
     __renderToolbarTitle (h) {
@@ -149,13 +252,53 @@ export default {
       ])
     },
 
+    __renderFilter (h) {
+      return h(QInput, {
+        ref: 'input',
+        staticClass: 'q-mx-sm',
+        style: {
+          minWidth: '150px'
+        },
+        attrs: {
+          placeholder: 'Filter...'
+        },
+        props: {
+          value: this.filter,
+          inputClass: 'text-right',
+          dense: true,
+          borderless: true
+        },
+        on: {
+          input: v => {
+            this.filter = v
+          }
+        },
+        scopedSlots: {
+          append: () => h(QIcon, {
+            staticClass: 'cursor-pointer',
+            props: {
+              name: this.filter !== '' ? 'clear' : 'search'
+            },
+            on: {
+              click: this.__onFilter
+            }
+          })
+        }
+      })
+    },
+
     __renderToolbar (h) {
-      return h(QToolbar, [
+      return h(QToolbar, {
+        staticClass: ''
+      }, [
         this.__renderRibbon(h),
-        h(QSpace),
         h('div', {
-          staticClass: 'col-auto text-grey text-caption'
-        }, this.type)
+          staticClass: 'q-ml-md col-auto text-grey text-caption'
+        }, [
+          this.$q.screen.gt.xs && this.type
+        ]),
+        h(QSpace),
+        this.$q.screen.width >= 385 && this.__renderFilter(h)
       ])
     },
 
@@ -199,7 +342,7 @@ export default {
         h('div', {
           staticClass: 'col'
         }),
-        h(QBadge, [ count ])
+        count > 0 && h(QBadge, [ count ])
       ])
     },
 
@@ -338,6 +481,7 @@ export default {
           }
         }),
         this.__renderTabs(h),
+        h(QSpace),
         h(QSeparator, {
           props: {
             color: this.separatorColor
