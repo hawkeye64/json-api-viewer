@@ -1,16 +1,16 @@
 import { version } from '../package.json'
-import Component from './components/JsonApiViewer.js'
+import JsonApiViewer from './components/JsonApiViewer.js'
 
 export {
   version,
-  Component
+  JsonApiViewer
 }
 
 export default {
   version,
-  Component,
+  JsonApiViewer,
 
   install (Vue) {
-    Vue.component(Component.name, Component)
+    Vue.component(JsonApiViewer.name, JsonApiViewer)
   }
 }
