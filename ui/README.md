@@ -3,9 +3,33 @@
 [![npm](https://img.shields.io/npm/v/quasar-ui-json-api-viewer.svg?label=quasar-ui-json-api-viewer)](https://www.npmjs.com/package/quasar-ui-json-api-viewer)
 [![npm](https://img.shields.io/npm/dt/quasar-ui-json-api-viewer.svg)](https://www.npmjs.com/package/quasar-ui-json-api-viewer)
 
-# Component JsonApiViewer
-> Short description of the component
+Use the **JsonApiViewer** component to display json as validated and built via the [Quasar Json Api](https://github.com/hawkeye64/quasar-json-api) library for UI kit (`quasar create myApp --kit ui`). (Note: supports Quasar `dark mode`)
 
+As simple as:
+
+```html
+<template>
+  <q-page padding>
+    <json-api-viewer title="QCalendar API" :json="api" />
+  </q-page>
+</template>
+
+<script>
+import Api from '../api/QCalendar.json'
+export default {
+  data () {
+    return {
+      api: Api
+    }
+  }
+}
+</script>
+```
+
+Additional properties:
+
+- `type` - A string. Defaults to `Vue Component`.
+- `starting-tab` - The default starting tab is `props`, but if you have no props, you may want to start with a different tab.
 
 # Usage
 
@@ -31,7 +55,7 @@ Vue.use(Plugin)
 <style src="quasar-ui-json-api-viewer/dist/index.css"></style>
 
 <script>
-import { Component as JsonApiViewer } from 'quasar-ui-json-api-viewer'
+import { JsonApiViewer } from 'quasar-ui-json-api-viewer'
 
 export default {
   components: {
@@ -57,7 +81,7 @@ Vue.use(Plugin)
 <style src="quasar-ui-json-api-viewer/dist/index.css"></style>
 
 <script>
-import { Component as JsonApiViewer } from 'quasar-ui-json-api-viewer'
+import { JsonApiViewer } from 'quasar-ui-json-api-viewer'
 
 export default {
   components: {
@@ -116,14 +140,10 @@ $ yarn dev:electron
 
 # Building package
 ```bash
+$ cd ui
 $ yarn build
 ```
 
-# Adding Testing Components
-in the `ui/dev/src/pages` you can add Vue files to test your component/directive. When using `yarn dev` to build the UI, any pages in that location will automatically be picked up by dynamic routing and added to the test page.
-
-# Adding Assets
-If you have a component that has assets, like language or icon-sets, you will need to provide these for UMD. In the `ui/build/script.javascript.js` file, you will find a couple of commented out commands that call `addAssets`. Uncomment what you need and add your assets to have them be built and put into the `ui/dist` folder.
 
 # Donate
 If you appreciate the work that went into this, please consider donating to [Quasar](https://donate.quasar.dev) or [Jeff](https://github.com/sponsors/hawkeye64).
