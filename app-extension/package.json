@@ -1,6 +1,6 @@
 {
   "name": "quasar-app-extension-json-api-viewer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Quasar App Extension for viewing JSON API",
   "author": "Jeff Galbraith <jeff@quasar.dev>",
   "license": "MIT",
