@@ -15,8 +15,6 @@ function extendConf (conf) {
 
   // make sure the stylesheet goes through webpack to avoid SSR issues
   conf.css.push('~quasar-ui-json-api-viewer/src/index.sass')
-  conf.css.push('~@quasar/quasar-ui-qmarkdown/src/index.sass')
-  conf.css.push('~@quasar/quasar-ui-qribbon/src/index.sass')
 }
 
 module.exports = function (api) {
