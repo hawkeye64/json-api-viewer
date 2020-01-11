@@ -12,6 +12,7 @@ function extendConf (conf) {
 
   // make sure app extension files & ui package gets transpiled
   conf.build.transpileDependencies.push(/quasar-app-extension-json-api-viewer[\\/]src/)
+  conf.build.transpileDependencies.push(/quasar-ui-json-api-viewer[\\/]src/)
 
   // make sure the stylesheet goes through webpack to avoid SSR issues
   conf.css.push('~quasar-ui-json-api-viewer/src/index.sass')
