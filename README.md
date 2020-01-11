@@ -1,6 +1,8 @@
 <img src="https://img.shields.io/npm/v/quasar-ui-json-api-viewer.svg?label=quasar-ui-json-api-viewer">
 <img src="https://img.shields.io/npm/v/quasar-app-extension-json-api-viewer.svg?label=quasar-app-extension-json-api-viewer">
 
+![json-api-viewer showing QCalendar](https://raw.githubusercontent.com/hawkeye64/json-api-viewer/master/images/json-api-viewer--qcalendar.png)
+
 # Structure
 * [/ui](ui) - standalone npm package (read this one for more info)
 * [/app-extension](app-extension) - Quasar app extension
