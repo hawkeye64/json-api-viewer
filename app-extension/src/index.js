@@ -26,7 +26,7 @@ module.exports = function (api) {
   api.compatibleWith('@quasar/app', '^1.3.0')
 
   // Uncomment the line below if you provide a JSON API for your component
-  // api.registerDescribeApi('JsonApiViewer', '~quasar-ui-json-api-viewer/src/components/JsonApiViewer.json')
+  api.registerDescribeApi('JsonApiViewer', '~quasar-ui-json-api-viewer/dist/api/JsonApiViewer.json')
 
   // We extend /quasar.conf.js
   api.extendQuasarConf(extendConf)
