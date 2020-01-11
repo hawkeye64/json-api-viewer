@@ -2,7 +2,7 @@
 <img src="https://img.shields.io/npm/v/quasar-app-extension-json-api-viewer.svg?label=quasar-app-extension-json-api-viewer">
 
 # Structure
-* [/ui](ui) - standalone npm package
+* [/ui](ui) - standalone npm package (read this one for more info)
 * [/app-extension](app-extension) - Quasar app extension
 
 # Donate
