@@ -1,5 +1,8 @@
-<img src="https://img.shields.io/npm/v/quasar-ui-json-api-viewer.svg?label=quasar-ui-json-api-viewer">
-<img src="https://img.shields.io/npm/v/quasar-app-extension-json-api-viewer.svg?label=quasar-app-extension-json-api-viewer">
+![quasar-ui-json-api-viewer](https://img.shields.io/npm/v/quasar-ui-json-api-viewer.svg?label=quasar-ui-json-api-viewer)
+![quasar-app-extension-json-api-viewer](https://img.shields.io/npm/v/quasar-app-extension-json-api-viewer.svg?label=quasar-app-extension-json-api-viewer)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/hawkeye64/json-api-viewer.svg)]()
+[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/hawkeye64/json-api-viewer.svg)]()
+
 
 ![json-api-viewer showing QCalendar](https://raw.githubusercontent.com/hawkeye64/json-api-viewer/master/images/json-api-viewer--qcalendar.png)
 
