@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "docsUrl": "https://github.com/hawkeye64/json-api-viewer"
+  },
+  "props": {
+    "title": {
+      "type": "String",
+      "required": true,
+      "category": "content",
+      "desc": "Provide a title for your displayed api",
+      "examples": [
+        "title=\"QCalendar API\""
+      ]
+    },
+    "json": {
+      "type": "Object",
+      "required": true,
+      "category": "content",
+      "desc": "This is the JSON to be displayed",
+      "__exemption": [ "examples" ]
+    },
+    "type": {
+      "type": "String",
+      "category": "content",
+      "default": "Vue Component",
+      "desc": "Used to show context for the API",
+      "examples": [
+        "type=\"Vue Mixin\"",
+        "type=\"Exported Methods\""
+      ]
+    },
+    "starting-tab": {
+      "type": "String",
+      "category": "behavior",
+      "default": "props",
+      "desc": "Change the starting tab",
+      "examples": [
+        "starting-tab=\"methods\"",
+        "starting-tab=\"slots\""
+      ]
+    },
+    "starting-inner-tab": {
+      "type": "String",
+      "category": "behavior",
+      "default": "model",
+      "desc": "Change the starting inner tab when on `props`",
+      "examples": [
+        "starting-inner-tab=\"content\"",
+        "starting-inner-tab=\"behavior\""
+      ]
+    }
+  }
+}
