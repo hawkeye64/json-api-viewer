@@ -41,7 +41,8 @@ export default {
       type: String,
       default: 'Vue Component'
     },
-    startingTab: String
+    startingTab: String,
+    startingInnerTab: String
   },
 
   data () {
@@ -63,6 +64,7 @@ export default {
 
   mounted () {
     this.currentTab = this.startingTab || this.currentTab
+    this.currentInnerTab = this.startingInnerTab || this.currentInnerTab
     this.__parseJson(this.json)
   },
 
