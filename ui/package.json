@@ -17,7 +17,8 @@
     "dev:electron": "cd dev && yarn 'dev:electron' && cd ..",
     "build": "node build/index.js",
     "build:js": "node build/script.javascript.js",
-    "build:css": "node build/script.css.js"
+    "build:css": "node build/script.css.js",
+    "build:api": "node build/build.api.js"
   },
   "publishConfig": {
     "access": "public"
@@ -50,6 +51,7 @@
     "postcss": "^7.0.26",
     "postcss-rtl": "^1.5.0",
     "quasar": "^1.6.0",
+    "quasar-json-api": "^0.0.19",
     "rimraf": "^3.0.0",
     "rollup": "^1.28.0",
     "uglify-es": "^3.3.9",
