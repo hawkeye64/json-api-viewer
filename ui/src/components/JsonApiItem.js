@@ -5,7 +5,7 @@ import {
 
 import {
   QMarkdown
-} from '@quasar/quasar-ui-qmarkdown/src/index.js'
+} from '@quasar/quasar-ui-qmarkdown'
 
 const NAME_PROP_COLOR = [
   'bg-orange-8',
