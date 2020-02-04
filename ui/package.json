@@ -20,15 +20,23 @@
     "build:css": "node build/script.css.js",
     "build:api": "node build/build.api.js"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/hawkeye64"
+  },
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/hawkeye64/json-api-viewer.git"
   },
-  "bugs": "",
-  "homepage": "",
+  "bugs": "https://github.com/hawkeye64/json-api-viewer/issues",
+  "homepage": "https://github.com/hawkeye64/json-api-viewer",
+  "vetur": {
+    "tags": "dist/vetur/tags.json",
+    "attributes": "dist/vetur/attributes.json"
+  },
   "dependencies": {
     "@quasar/quasar-ui-qmarkdown": "^1.0.22",
     "@quasar/quasar-ui-qribbon": "^1.0.0-beta.14"
