@@ -30,7 +30,7 @@ Additional properties:
 
 - `type` - A string. Defaults to `Vue Component`.
 - `starting-tab` - The default starting tab is `props`, but if you have no props, you may want to start with a different tab.
-- `starting-inner-tab` - The default starting inner tab is `model`, but if you have no model in your categories, you may want to start with a different inner tab.
+- `starting-inner-tab` - The default starting inner tab is `model`, but if you have no model in your prop categories, you may want to start with a different inner tab.
 
 # Usage
 
