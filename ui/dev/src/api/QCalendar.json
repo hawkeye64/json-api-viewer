@@ -1,4 +1,5 @@
 {
+  "type": "component",
   "meta": {
     "docsUrl": "https://quasarframework.github.io/quasar-ui-qcalendar/docs"
   },
@@ -25,25 +26,58 @@
         "All"
       ],
       "values": [
+        "month",
+        "week",
         "day",
         "2day",
         "3day",
         "4day",
         "5day",
         "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
         "month-scheduler",
-        "custom-scheduler"
+        "week-scheduler",
+        "scheduler",
+        "day-scheduler",
+        "2day-scheduler",
+        "3day-scheduler",
+        "4day-scheduler",
+        "5day-scheduler",
+        "6day-scheduler",
+        "custom-scheduler",
+        "month-agenda",
+        "week-agenda",
+        "day-agenda",
+        "2day-agenda",
+        "3day-agenda",
+        "4day-agenda",
+        "5day-agenda",
+        "6day-agenda",
+        "month-interval",
+        "custom-interval"
       ],
       "examples": [
         "view=\"week\"",
-        "view=\"month\""
+        "view=\"month\"",
+        "view=\"week-agenda\""
       ]
+    },
+    "dark": {
+      "type": "Boolean",
+      "category": "style",
+      "desc": "Places a calendar in dark mode",
+      "applicable": [
+        "all"
+      ],
+      "addedIn": "v1.5.1"
+    },
+    "bordered": {
+      "type": "Boolean",
+      "category": "style",
+      "desc": "Places a border around the calendar",
+      "applicable": [
+        "all"
+      ],
+      "addedIn": "v1.5.0"
     },
     "now": {
       "type": "String",
@@ -58,7 +92,7 @@
       ]
     },
     "weekdays": {
-      "type": "String",
+      "type": "Array",
       "category": "model",
       "desc": "This is the days of the week and in which order they are displayed. If you want Monday as the first day of the week, you would use [1,2,3,4,5,6,0]. If you want a 5-day work week you would use [1,2,3,4,5]",
       "default": "[0,1,2,3,4,5,6]",
@@ -68,6 +102,15 @@
       "examples": [
         ":weekdays=\"[1,2,3,4,5,6,0]\"",
         ":weekdays=\"[1,2,3,4,5]\""
+      ]
+    },
+    "no-active-date": {
+      "type": "Boolean",
+      "category": "behavior",
+      "addedIn": "1.4.0",
+      "desc": "This controls whether the `q-active-date` css class is set when a user clicks on a date label (button)",
+      "applicable": [
+        "All"
       ]
     },
     "disabled-days": {
@@ -99,12 +142,12 @@
     "max-days": {
       "type": "String",
       "category": "model",
-      "desc": "The number of days to be displayed. Applicable only for custom-interval and scheduler views",
+      "desc": "The number of days to be displayed. Applicable only for custom-interval, scheduler and agenda views",
       "default": 7,
       "applicable": [
         "custom-interval",
         "scheduler",
-        "custom-scheduler"
+        "agenda"
       ],
       "examples": [
         "max-days=\"14\"",
@@ -139,8 +182,7 @@
       "desc": "Object containing keys and values that overrides the calendar's color properties. See online demo for format of a theme",
       "applicable": [
         "All"
-      ],
-      "__exemption": [ "examples" ]
+      ]
     },
     "hide-header": {
       "type": "Boolean",
@@ -197,13 +239,11 @@
       "params": {
         "event": {
           "type": "Object",
-          "desc": "The event associated with the dragover",
-          "__exemption": [ "examples" ]
+          "desc": "The event associated with the dragover"
         },
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object associated with the date and optional time (if an interval)",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object associated with the date and optional time (if an interval)"
         },
         "type": {
           "type": "String",
@@ -216,8 +256,7 @@
         },
         "index": {
           "type": "Number",
-          "desc": "The column-count index location of the start of the drag (only available if property `column-count` is set)",
-          "__exemption": [ "examples" ]
+          "desc": "The column-count index location of the start of the drag (only available if property `column-count` is set)"
         }
       },
       "applicable": [
@@ -238,13 +277,11 @@
       "params": {
         "event": {
           "type": "Object",
-          "desc": "The event associated with the drop",
-          "__exemption": [ "examples" ]
+          "desc": "The event associated with the drop"
         },
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object associated with the date and optional time (if an interval) of the drop",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object associated with the date and optional time (if an interval) of the drop"
         },
         "type": {
           "type": "String",
@@ -257,8 +294,7 @@
         },
         "index": {
           "type": "Number",
-          "desc": "The column-count index location of the start of the drag (only available if property `column-count` is set)",
-          "__exemption": [ "examples" ]
+          "desc": "The column-count index location of the start of the drag (only available if property `column-count` is set)"
         }
       },
       "applicable": [
@@ -287,10 +323,8 @@
         "week",
         "month-interval",
         "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
+        "all scheduler",
+        "all agenda"
       ]
     },
     "column-header-before": {
@@ -355,10 +389,7 @@
         "week",
         "month-interval",
         "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
+        "all scheduler"
       ]
     },
     "interval-height": {
@@ -396,12 +427,15 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "A timestamp object associated with the interval",
-          "__exemption": [ "examples" ]
+          "desc": "A timestamp object associated with the interval"
         }
       },
       "returns": {
-        "type": ["Array", "Object", "String"],
+        "type": [
+          "Array",
+          "Object",
+          "String"
+        ],
         "desc": "A Vue style object",
         "examples": [
           "{ color: #ccc; }"
@@ -418,10 +452,7 @@
         "week",
         "month-interval",
         "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
+        "all scheduler"
       ],
       "examples": [
         "interval-style=\"background-color: #c0c0c0\"",
@@ -446,10 +477,7 @@
         "week",
         "month-interval",
         "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
+        "all scheduler"
       ],
       "examples": [
         "interval-minutes=\"15\"",
@@ -474,10 +502,7 @@
         "week",
         "month-interval",
         "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
+        "all scheduler"
       ],
       "examples": [
         "interval-count=\"48\"",
@@ -502,10 +527,7 @@
         "week",
         "month-interval",
         "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
+        "all scheduler"
       ],
       "examples": [
         "interval-start=\"6\"",
@@ -526,10 +548,7 @@
         "week",
         "month-interval",
         "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
+        "all scheduler"
       ]
     },
     "day-height": {
@@ -538,8 +557,8 @@
         "String"
       ],
       "category": "behavior",
-      "desc": "The maximum height in pixels for the day height",
-      "default": "50",
+      "desc": "The maximum height in pixels for the day height. Using 0 will make the rows variable height based on content.",
+      "default": "0",
       "applicable": [
         "month"
       ],
@@ -567,24 +586,57 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "A timestamp object associated with the day",
-          "__exemption": [ "examples" ]
+          "desc": "A timestamp object associated with the day"
         }
       },
       "returns": {
-        "type": ["Array", "Object", "String"],
+        "type": [
+          "Array",
+          "Object",
+          "String"
+        ],
         "desc": "A Vue style object",
         "examples": [
           "{ color: #ccc; }"
         ]
       },
-      "default": "{}",
+      "default": "null",
       "applicable": [
         "month"
       ],
       "examples": [
         "day-style=\"background-color: #c0c0c0\"",
         ":day-style=\"dayStyle\""
+      ]
+    },
+    "day-class": {
+      "type": "Function",
+      "category": "style",
+      "addedIn": "v1.3.1",
+      "desc": "Gets called to provide custom styling (via classes) of a day",
+      "params": {
+        "timestamp": {
+          "type": "Object",
+          "desc": "A timestamp object associated with the day"
+        }
+      },
+      "returns": {
+        "type": [
+          "Array",
+          "Object",
+          "String"
+        ],
+        "desc": "A Vue style object of classes",
+        "examples": [
+          "{ 'q-selected-day': true }"
+        ]
+      },
+      "default": "null",
+      "applicable": [
+        "month"
+      ],
+      "examples": [
+        ":day-class=\"getDayClass\""
       ]
     },
     "min-weeks": {
@@ -703,28 +755,28 @@
         "data": {
           "type": "Object",
           "desc": "The data passed to the function",
-          "__exemption": [ "examples" ],
           "definition": {
             "timestamp": {
               "type": "Object",
-              "desc": "A timestamp object associated with the interval",
-              "__exemption": [ "examples" ]
+              "desc": "A timestamp object associated with the interval"
             },
             "index": {
               "type": "Number",
-              "desc": "The resource index",
-              "__exemption": [ "examples" ]
+              "desc": "The resource index"
             },
             "resource": {
               "type": "Object",
-              "desc": "The resource object",
-              "__exemption": [ "examples" ]
+              "desc": "The resource object"
             }
           }
         }
       },
       "returns": {
-        "type": ["Array", "Object", "String"],
+        "type": [
+          "Array",
+          "Object",
+          "String"
+        ],
         "desc": "A Vue style object",
         "examples": [
           "{ color: #ccc; }"
@@ -736,6 +788,493 @@
       ],
       "examples": [
         ":resource-style=\"resourceStyle\""
+      ]
+    },
+    "selected-start-end-dates": {
+      "type": "Array",
+      "category": "behavior",
+      "addedIn": "v1.2.0",
+      "desc": "An array of two dates (YYYY-mm-dd) for selection purposes",
+      "applicable": [
+        "month"
+      ],
+      "examples": [
+        ":selected-start-end-dates=\"getStartEndDates\""
+      ]
+    },
+    "selected-dates": {
+      "type": "Array",
+      "category": "model",
+      "addedIn": "v1.3.14",
+      "desc": "An array of string dates in the form YYYY-mm-dd that will be selected",
+      "applicable": [
+        "month"
+      ],
+      "examples": [
+        ":selected-dates=\"['2019-04-01', '2019-04-02', '2019-04-03', '2019-04-04']\""
+      ]
+    },
+    "mini-mode": {
+      "type": [
+        "Boolean",
+        "String"
+      ],
+      "category": "behavior",
+      "addedIn": "v1.3.0",
+      "values": [
+        true,
+        false,
+        "auto"
+      ],
+      "desc": "When `true` puts the calendar into mini-mode. When `auto`, then the property `breakpoint` is used to determine when the calendar will be put into mini-mode",
+      "applicable": [
+        "month"
+      ],
+      "examples": [
+        "mini-mode",
+        ":mini-mode=\"true\"",
+        "mini-mode=\"auto\""
+      ]
+    },
+    "breakpoint": {
+      "type": "String",
+      "category": "behavior",
+      "addedIn": "v1.3.0",
+      "values": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "desc": "This property is used when `mini-mode` is set with `auto`",
+      "applicable": [
+        "month"
+      ],
+      "examples": [
+        "breakpoint=\"sm\"",
+        "breakpoint=\"md\""
+      ]
+    },
+    "month-label-size": {
+      "type": "String",
+      "category": "style",
+      "addedIn": "v1.3.0",
+      "values": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "desc": "This property is used change the size of the month label button. This property is ignored when `mini-mode` is set to true",
+      "applicable": [
+        "month"
+      ],
+      "examples": [
+        "month-label-size=\"sm\"",
+        "month-label-size=\"md\""
+      ]
+    },
+    "left-column-options": {
+      "type": "Object",
+      "category": "behavior",
+      "addedIn": "v1.5.0",
+      "desc": "An array of objects used to add columns to the left side of the agenda. Each object must have an id and label key or define the id object key using the `column-options-id` and the label using the `column-options-label` properties. The value of the id should be unique for each object. The object is passed to slots",
+      "applicable": [
+        "week-agenda"
+      ],
+      "examples": [
+        ":left-column-options=\"leftColumnOptions\""
+      ]
+    },
+    "right-column-options": {
+      "type": "Object",
+      "category": "behavior",
+      "addedIn": "v1.5.0",
+      "desc": "An array of objects used to add columns to the right side of the agenda. Each object must have an id and label key or define the id object key using the `column-options-id` and the label using the `column-options-label` properties. The value of the id should be unique for each object. The object is passed to slots",
+      "applicable": [
+        "week-agenda"
+      ],
+      "examples": [
+        ":right-column-options=\"rightColumnOptions\""
+      ]
+    },
+    "column-options-id": {
+      "type": "String",
+      "category": "behavior",
+      "addedIn": "v1.5.0",
+      "desc": "The key in the object to use for `left-column-options` or `right-column-options` properties to define the id, otherwise `id` will be used",
+      "applicable": [
+        "week-agenda"
+      ],
+      "examples": [
+        "column-options-id=\"id\""
+      ]
+    },
+    "column-options-label": {
+      "type": "String",
+      "category": "behavior",
+      "addedIn": "v1.5.0",
+      "desc": "The key in the object to use for `left-column-options` or `right-column-options` properties to define the label, otherwise `label` will be used",
+      "applicable": [
+        "week-agenda"
+      ],
+      "examples": [
+        "column-options-label=\"name\""
+      ]
+    }
+  },
+  "scopedSlots": {
+    "day-header": {
+      "desc": "index is added if using `column-count` property",
+      "scope": {
+        "day": {
+          "type": "Object",
+          "desc": "Timestamp object"
+        }
+      },
+      "applicable": [
+        "day"
+      ]
+    },
+    "day-header-label": {
+      "desc": "Used to replace the label",
+      "scope": {
+        "day": {
+          "type": "Object",
+          "desc": "Timestamp object"
+        }
+      },
+      "applicable": [
+        "day",
+        "week-agenda"
+      ]
+    },
+    "day-body": {
+      "desc": "index is added if using `column-count` property",
+      "scope": {
+        "day": {
+          "type": "Object",
+          "desc": "Timestamp object"
+        }
+      },
+      "applicable": [
+        "day",
+        "week-agenda"
+      ]
+    },
+    "day-container": {
+      "desc": "The container is everything below the headers, including the intervals",
+      "scope": {
+        "days": {
+          "type": "Array",
+          "desc": "An array of timestamp objects that are to be displayed in the container. This slot does not replace the container, but instead, allows you to add to it. Example: use css 'position: absolute` to create a 'current time' bar."
+        }
+      }
+    },
+    "intervals-header": {
+      "desc": "Use to render items in the intervals header",
+      "scope": {
+        "days": {
+          "type": "Array",
+          "desc": "An array of Timestamp objects"
+        }
+      },
+      "applicable": [
+        "day"
+      ]
+    },
+    "interval": {
+      "desc": "index is added if using `column-count` property",
+      "scope": {
+        "timeStartPos": {
+          "type": "Function",
+          "desc": "Calculates the start position of the passed in time",
+          "params": {
+            "time": {
+              "type": "String",
+              "desc": "The time for which a position is needed in 24-hour format (HHmm)",
+              "examples": [
+                "09:00"
+              ]
+            }
+          },
+          "returns": {
+            "type": "Number",
+            "desc": "The absolute y starting position",
+            "examples": [
+              "120",
+              "482"
+            ]
+          }
+        },
+        "timeDurationHeight": {
+          "type": "Function",
+          "desc": "Given a duration (in seconds), will return the css height value",
+          "params": {
+            "duration": {
+              "type": [
+                "Number",
+                "String"
+              ],
+              "desc": "The number of seconds for the event to calculate it's height",
+              "examples": [
+                "300",
+                "900"
+              ]
+            }
+          },
+          "returns": {
+            "type": "Number",
+            "desc": "The height (in pixels) to be used for the event",
+            "examples": [
+              "80",
+              "120"
+            ]
+          }
+        }
+      },
+      "applicable": [
+        "day"
+      ]
+    },
+    "column-header-before": {
+      "desc": "Use to render items before the column header",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": "Timestamp object"
+        }
+      },
+      "applicable": [
+        "day"
+      ]
+    },
+    "column-header-after": {
+      "desc": "Use to render items after the column header",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": "Timestamp object"
+        }
+      },
+      "applicable": [
+        "day"
+      ]
+    },
+    "day": {
+      "desc": "Use to add items to the `day` rendering",
+      "scope": {
+        "outside": {
+          "type": "Boolean",
+          "desc": "true if the date is outside of the calendar month, but still displayed"
+        },
+        "day": {
+          "type": "Object",
+          "desc": "A destructured timestamp for the day of the slotted content"
+        },
+        "miniMode": {
+          "type": "Boolean",
+          "desc": "true if currently in mini-mode. Handle if you have set mini-mode to `auto`"
+        }
+      },
+      "applicable": [
+        "month"
+      ]
+    },
+    "day-label": {
+      "desc": "Use to replace the `day label`",
+      "scope": {
+        "dayLabel": {
+          "type": "String",
+          "desc": "The string of the dayLabel"
+        },
+        "day": {
+          "type": "Object",
+          "desc": "A destructured timestamp for the day of the slotted content"
+        },
+        "miniMode": {
+          "type": "Boolean",
+          "desc": "true if currently in mini-mode. Handle if you have set mini-mode to `auto`"
+        }
+      },
+      "applicable": [
+        "month"
+      ]
+    },
+    "month-label": {
+      "desc": "Use to replace the `month label`. Not applicable in `mini-mode`",
+      "scope": {
+        "monthLabel": {
+          "type": "String",
+          "desc": "The string of the monthLabel"
+        },
+        "day": {
+          "type": "Object",
+          "desc": "A destructured timestamp for the day of the slotted content"
+        },
+        "miniMode": {
+          "type": "Boolean",
+          "desc": "true if currently in mini-mode. Handle if you have set mini-mode to `auto`"
+        }
+      },
+      "applicable": [
+        "month"
+      ]
+    },
+    "day-of-year": {
+      "desc": "Use to replace the `day of year` label. Not applicable in `mini-mode`",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": "Timestamp object"
+        }
+      },
+      "applicable": [
+        "month"
+      ]
+    },
+    "workweek": {
+      "desc": "",
+      "scope": {
+        "workweekLabel": {
+          "type": "String",
+          "desc": "The string for the workweek label"
+        },
+        "date": {
+          "type": "Object",
+          "desc": "Timestamp object, workWeekLabel and miniMode"
+        },
+        "miniMode": {
+          "type": "Boolean",
+          "desc": "true if currently in mini-mode. Handle if you have set mini-mode to `auto`"
+        }
+      },
+      "applicable": [
+        "month"
+      ]
+    },
+    "week": {
+      "desc": "",
+      "applicable": [
+        "month"
+      ],
+      "scope": {
+        "week": {
+          "type": "Array",
+          "desc": "This is an array of timestamp objects. One for each day of the week to be displayed"
+        },
+        "weekdays": {
+          "type": "Array",
+          "desc": "This is the days of the week and in which order they are displayed",
+          "examples": [
+            "weekdays: '[1,2,3,4,5,6,0]'",
+            "weekdays: '[1,2,3,4,5]'"
+          ]
+        },
+        "miniMode": {
+          "type": "Boolean",
+          "desc": "true if currently in mini-mode. Handle if you have set mini-mode to `auto`"
+        }
+      }
+    },
+    "scheduler-resources-header": {
+      "desc": "",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": ""
+        }
+      },
+      "applicable": [
+        "scheduler"
+      ]
+    },
+    "scheduler-day-header": {
+      "desc": "",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": ""
+        }
+      },
+      "applicable": [
+        "scheduler"
+      ]
+    },
+    "scheduler-column-header-before": {
+      "desc": "",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": ""
+        }
+      },
+      "applicable": [
+        "scheduler"
+      ]
+    },
+    "scheduler-column-header-after": {
+      "desc": "",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": ""
+        }
+      },
+      "applicable": [
+        "scheduler"
+      ]
+    },
+    "scheduler-resource-day": {
+      "desc": "",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": ""
+        }
+      },
+      "applicable": [
+        "scheduler"
+      ]
+    },
+    "scheduler-resource": {
+      "desc": "",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": ""
+        }
+      },
+      "applicable": [
+        "scheduler"
+      ]
+    },
+    "column-header": {
+      "desc": "Use this slot to add to the column header when properties `left-column-options` or `right-column-options` are used",
+      "addedIn": "v1.5.0",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": "This is the object passed to properties `left-column-options` or `right-column-options`"
+        }
+      },
+      "applicable": [
+        "week-agenda"
+      ]
+    },
+    "column-body": {
+      "desc": "Use this slot to add to the column body when properties `left-column-options` or `right-column-options` are used",
+      "addedIn": "v1.5.0",
+      "scope": {
+        "data": {
+          "type": "Object",
+          "desc": "This is the object passed to properties `left-column-options` or `right-column-options`"
+        }
+      },
+      "applicable": [
+        "week-agenda"
       ]
     }
   },
@@ -749,8 +1288,7 @@
         "value": {
           "type": "String",
           "desc": "In YYYY-mm-dd format",
-          "required": true,
-          "__exemption": [ "examples" ]
+          "required": true
         }
       }
     },
@@ -762,13 +1300,11 @@
       "params": {
         "start": {
           "type": "Object",
-          "desc": "The timestamp object for the first valid date being displayed",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object for the first valid date being displayed"
         },
         "end": {
           "type": "Object",
-          "desc": "The timestamp object for the last valid date being displayed",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object for the last valid date being displayed"
         }
       }
     },
@@ -780,8 +1316,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object of the move. For instance, if in month view, this will be the timestamp object containing the 1st of the month",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object of the move. For instance, if in month view, this will be the timestamp object containing the 1st of the month"
         }
       }
     },
@@ -793,8 +1328,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -806,8 +1340,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -819,8 +1352,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -832,8 +1364,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -845,8 +1376,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -858,8 +1388,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -871,8 +1400,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -884,8 +1412,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -897,8 +1424,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -910,12 +1436,10 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
-
     "click:day": {
       "desc": "Occurs on day area",
       "applicable": [
@@ -924,8 +1448,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -937,8 +1460,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -950,8 +1472,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -963,8 +1484,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -976,8 +1496,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -989,8 +1508,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1002,8 +1520,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1015,8 +1532,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1028,8 +1544,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1041,12 +1556,10 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
-
     "click:interval": {
       "desc": "Occurs on interval area",
       "applicable": [
@@ -1068,8 +1581,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1094,8 +1606,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1120,8 +1631,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1146,8 +1656,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1172,8 +1681,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1198,8 +1706,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1224,8 +1731,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1250,8 +1756,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1276,8 +1781,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1302,12 +1806,10 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
-
     "click:time": {
       "desc": "Occurs on interval time area",
       "applicable": [
@@ -1329,8 +1831,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1355,8 +1856,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1381,8 +1881,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1407,8 +1906,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1433,8 +1931,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1459,8 +1956,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1485,8 +1981,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1511,8 +2006,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1537,8 +2031,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
@@ -1563,12 +2056,10 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "The timestamp object"
         }
       }
     },
-
     "click:resource": {
       "desc": "Occurs on resource area",
       "applicable": [
@@ -1580,8 +2071,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
@@ -1596,8 +2086,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
@@ -1612,8 +2101,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
@@ -1628,8 +2116,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
@@ -1644,8 +2131,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
@@ -1660,8 +2146,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
@@ -1676,8 +2161,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
@@ -1692,8 +2176,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
@@ -1708,8 +2191,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
@@ -1724,12 +2206,10 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object and resource index",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object and resource index"
         }
       }
     },
-
     "click:resource:day": {
       "desc": "Occurs on resource day area",
       "applicable": [
@@ -1741,8 +2221,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
         }
       }
     },
@@ -1757,8 +2236,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
         }
       }
     },
@@ -1773,8 +2251,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
         }
       }
     },
@@ -1789,8 +2266,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
         }
       }
     },
@@ -1805,8 +2281,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
         }
       }
     },
@@ -1821,8 +2296,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
         }
       }
     },
@@ -1837,8 +2311,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
         }
       }
     },
@@ -1853,8 +2326,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
         }
       }
     },
@@ -1869,8 +2341,7 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
         }
       }
     },
@@ -1885,8 +2356,267 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object",
-          "__exemption": [ "examples" ]
+          "desc": "Object contains resource object, resource index and the timestamp object"
+        }
+      }
+    },
+    "click:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "contextmenu:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mousedown:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mouseup:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mouseenter:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mouseleave:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mousemove:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "touchstart:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "touchend:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "touchmove:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "click:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "contextmenu:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mousedown:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mouseup:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mouseenter:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mouseleave:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "mousemove:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "touchstart:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "touchend:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
+        }
+      }
+    },
+    "touchmove:column:": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
         }
       }
     }
@@ -1894,17 +2624,21 @@
   "methods": {
     "prev": {
       "desc": "Triggers component to display previous (ex: day, week, month)",
-      "applicable": [ "All "],
-      "__exemption": [ "examples" ]
+      "applicable": [
+        "All"
+      ]
     },
     "next": {
       "desc": "Triggers component to display next (ex: day, week, month)",
-      "applicable": [ "All "],
-      "__exemption": [ "examples" ]
+      "applicable": [
+        "All"
+      ]
     },
     "move": {
       "desc": "Triggers component to move for count iterations, depending on positive (forwards) or negative (backwards) value",
-      "applicable": [ "All "],
+      "applicable": [
+        "All"
+      ],
       "params": {
         "count": {
           "type": "Number",
@@ -1918,8 +2652,9 @@
     },
     "updateCurrent": {
       "desc": "Update various values to be consistent with current date",
-      "applicable": [ "All "],
-      "__exemption": [ "examples" ]
+      "applicable": [
+        "All"
+      ]
     },
     "timeStartPos": {
       "desc": "Calculates the start position of the passed in time",
@@ -1942,7 +2677,7 @@
         "time": {
           "type": "String",
           "desc": "The time for which a position is needed in 24-hour format (HHmm)",
-          "examples":[
+          "examples": [
             "09:00"
           ]
         }
@@ -1975,9 +2710,12 @@
       ],
       "params": {
         "duration": {
-          "type": ["Number", "String"],
+          "type": [
+            "Number",
+            "String"
+          ],
           "desc": "The number of seconds for the event to calculate it's height",
-          "examples":[
+          "examples": [
             "300",
             "900"
           ]
@@ -2013,270 +2751,11 @@
         "time": {
           "type": "String",
           "desc": "The time in which to scoll to. If the time is already visible on the viewport, this function will have no affect.",
-          "examples":[
+          "examples": [
             "09:00"
           ]
         }
       }
-    }
-  },
-  "scopedSlots": {
-    "day-header": {
-      "desc": "index is added if using `column-count` property",
-      "scope": {
-        "day": {
-          "type": "Object",
-          "desc": "Timestamp object",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "day"
-      ]
-    },
-    "day-body": {
-      "desc": "index is added if using `column-count` property",
-      "scope": {
-        "day": {
-          "type": "Object",
-          "desc": "Timestamp object",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "day",
-        "month"
-      ]
-    },
-    "day-container": {
-      "desc": "The container is everything below the headers, including the intervals",
-      "scope": {
-        "days": {
-          "type": "Array",
-          "desc": "An array of timestamp objects that are to be displayed in the container. This slot does not replace the container, but allow you to add to it. Example: use css 'position: absolute` to create a 'current time' bar.",
-          "__exemption": [ "examples" ]
-        }
-      }
-    },
-    "intervals-header": {
-      "desc": "",
-      "scope": {
-        "days": {
-          "type": "Array",
-          "desc": "An array of Timestamp objects",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "day"
-      ]
-    },
-    "interval": {
-      "desc": "index is added if using `column-count` property",
-      "scope": {
-        "timeStartPos": {
-          "type": "Function",
-          "desc": "Calculates the start position of the passed in time",
-          "params": {
-            "time": {
-              "type": "String",
-              "desc": "The time for which a position is needed in 24-hour format (HHmm)",
-              "examples":[
-                "09:00"
-              ]
-            }
-          },
-          "returns": {
-            "type": "Number",
-            "desc": "The absolute y starting position",
-            "examples": [
-              "120",
-              "482"
-            ]
-          }
-        },
-        "timeDurationHeight": {
-          "type": "Function",
-          "desc": "Given a duration (in seconds), will return the css height value",
-          "params": {
-            "duration": {
-              "type": ["Number", "String"],
-              "desc": "The number of seconds for the event to calculate it's height",
-              "examples":[
-                "300",
-                "900"
-              ]
-            }
-          },
-          "returns": {
-            "type": "Number",
-            "desc": "The height (in pixels) to be used for the event",
-            "examples": [
-              "80",
-              "120"
-            ]
-          }
-        }
-      },
-      "applicable": [
-        "day"
-      ]
-    },
-    "column-header-before": {
-      "desc": "",
-      "scope": {
-        "day": {
-          "type": "Object",
-          "desc": "Timestamp object",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "day"
-      ]
-    },
-    "column-header-after": {
-      "desc": "",
-      "scope": {
-        "day": {
-          "type": "Object",
-          "desc": "Timestamp object",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "day"
-      ]
-    },
-    "day": {
-      "desc": "",
-      "scope": {
-        "day": {
-          "type": "Object",
-          "desc": "Timestamp object",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "month"
-      ]
-    },
-    "month-label": {
-      "desc": "",
-      "scope": {
-        "data": {
-          "type": "Object",
-          "desc": "Timestamp object with monthLabel",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "month"
-      ]
-    },
-    "day-of-year": {
-      "desc": "",
-      "scope": {
-        "data": {
-          "type": "Object",
-          "desc": "Timestamp object",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "month"
-      ]
-    },
-    "work-week-label": {
-      "desc": "",
-      "scope": {
-        "data": {
-          "type": "Object",
-          "desc": "Timestamp object with workWeekLabel",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "month"
-      ]
-    },
-    "scheduler-resources-header": {
-      "desc": "",
-      "scope": {
-        "data": {
-          "type": "Object",
-          "desc": "",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "scheduler"
-      ]
-    },
-    "scheduler-day-header": {
-      "desc": "",
-      "scope": {
-        "data": {
-          "type": "Object",
-          "desc": "",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "scheduler"
-      ]
-    },
-    "scheduler-column-header-before": {
-      "desc": "",
-      "scope": {
-        "data": {
-          "type": "Object",
-          "desc": "",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "scheduler"
-      ]
-    },
-    "scheduler-column-header-after": {
-      "desc": "",
-      "scope": {
-        "data": {
-          "type": "Object",
-          "desc": "",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "scheduler"
-      ]
-    },
-    "scheduler-resource-day": {
-      "desc": "",
-      "scope": {
-        "data": {
-          "type": "Object",
-          "desc": "",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "scheduler"
-      ]
-    },
-    "scheduler-resource": {
-      "desc": "",
-      "scope": {
-        "data": {
-          "type": "Object",
-          "desc": "",
-          "__exemption": [ "examples" ]
-        }
-      },
-      "applicable": [
-        "scheduler"
-      ]
     }
   }
 }
