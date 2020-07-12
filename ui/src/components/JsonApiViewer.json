@@ -9,7 +9,8 @@
       "category": "content",
       "desc": "Provide a title for your displayed api",
       "examples": [
-        "title=\"QCalendar API\""
+        "title=\"QCalendar API\"",
+        "title=\"QCalendar Exports\""
       ]
     },
     "json": {

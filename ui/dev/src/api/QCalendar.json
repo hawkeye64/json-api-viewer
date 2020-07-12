@@ -1,5 +1,4 @@
 {
-  "type": "component",
   "meta": {
     "docsUrl": "https://quasarframework.github.io/quasar-ui-qcalendar/docs"
   },
@@ -7,7 +6,7 @@
     "value": {
       "type": "String",
       "category": "model",
-      "desc": "v-model; When set as YYYY-mm-dd, the calendar will display the current view on this date. If empty, then it will be changed to the current date which will be emitted",
+      "desc": "v-model; When set as `YYYY-MM-DD`, the calendar will display the current view on this date. If empty, then it will be changed to the current date which will be emitted",
       "required": true,
       "default": "now",
       "applicable": [
@@ -52,6 +51,8 @@
         "4day-agenda",
         "5day-agenda",
         "6day-agenda",
+        "resource",
+        "day-resource",
         "month-interval",
         "custom-interval"
       ],
@@ -116,12 +117,34 @@
     "disabled-days": {
       "type": "Array",
       "category": "model",
-      "desc": "An array of string dates in the form YYYY-mm-dd that will be disabled",
+      "desc": "An array of string dates in the form `YYYY-MM-DD` that will be disabled",
       "applicable": [
         "All"
       ],
       "examples": [
         ":disabled-days=\"['2019-04-01', '2019-04-02', '2019-04-03', '2019-04-04']\""
+      ]
+    },
+    "disabled-before": {
+      "type": "String",
+      "category": "model",
+      "desc": "A date in the form `YYYY-MM-DD` where all dates before, and including, will be disabled",
+      "applicable": [
+        "All"
+      ],
+      "examples": [
+        "disabled-before=\"2019-04-01\""
+      ]
+    },
+    "disabled-after": {
+      "type": "String",
+      "category": "model",
+      "desc": "A date in the form `YYYY-MM-DD` where all dates after, and including, will be disabled",
+      "applicable": [
+        "All"
+      ],
+      "examples": [
+        "disabled-before=\"2019-04-01\""
       ]
     },
     "locale": {
@@ -182,7 +205,8 @@
       "desc": "Object containing keys and values that overrides the calendar's color properties. See online demo for format of a theme",
       "applicable": [
         "All"
-      ]
+      ],
+      "__exemption": [ "examples" ]
     },
     "hide-header": {
       "type": "Boolean",
@@ -206,6 +230,16 @@
       "desc": "Turns on animation",
       "applicable": [
         "All"
+      ]
+    },
+    "sticky": {
+      "type": "Boolean",
+      "addedIn": "v2.0.0",
+      "category": "behavior",
+      "desc": "Turns on sticky resources and intervals",
+      "applicable": [
+        "resource",
+        "day-resource"
       ]
     },
     "transition-prev": {
@@ -239,11 +273,13 @@
       "params": {
         "event": {
           "type": "Object",
-          "desc": "The event associated with the dragover"
+          "desc": "The event associated with the dragover",
+          "__exemption": [ "examples" ]
         },
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object associated with the date and optional time (if an interval)"
+          "desc": "The timestamp object associated with the date and optional time (if an interval)",
+          "__exemption": [ "examples" ]
         },
         "type": {
           "type": "String",
@@ -256,7 +292,8 @@
         },
         "index": {
           "type": "Number",
-          "desc": "The column-count index location of the start of the drag (only available if property `column-count` is set)"
+          "desc": "The column-count index location of the start of the drag (only available if property `column-count` is set)",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -277,11 +314,13 @@
       "params": {
         "event": {
           "type": "Object",
-          "desc": "The event associated with the drop"
+          "desc": "The event associated with the drop",
+          "__exemption": [ "examples" ]
         },
         "timestamp": {
           "type": "Object",
-          "desc": "The timestamp object associated with the date and optional time (if an interval) of the drop"
+          "desc": "The timestamp object associated with the date and optional time (if an interval) of the drop",
+          "__exemption": [ "examples" ]
         },
         "type": {
           "type": "String",
@@ -294,7 +333,8 @@
         },
         "index": {
           "type": "Number",
-          "desc": "The column-count index location of the start of the drag (only available if property `column-count` is set)"
+          "desc": "The column-count index location of the start of the drag (only available if property `column-count` is set)",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -321,6 +361,7 @@
         "5day",
         "6day",
         "week",
+        "month",
         "month-interval",
         "custom-interval",
         "all scheduler",
@@ -387,6 +428,8 @@
         "5day",
         "6day",
         "week",
+        "resource",
+        "day-resource",
         "month-interval",
         "custom-interval",
         "all scheduler"
@@ -408,6 +451,8 @@
         "5day",
         "6day",
         "week",
+        "resource",
+        "day-resource",
         "month-interval",
         "custom-interval",
         "scheduler",
@@ -420,6 +465,24 @@
         "interval-height=\"100\""
       ]
     },
+    "interval-width": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "addedIn": "v2.0.0",
+      "category": "behavior",
+      "desc": "The maximum width in pixels for the interval width",
+      "default": "100",
+      "applicable": [
+        "resource",
+        "day-resource"
+      ],
+      "examples": [
+        "interval-width=\"60\"",
+        "interval-width=\"100\""
+      ]
+    },
     "interval-style": {
       "type": "Function",
       "category": "style",
@@ -427,15 +490,12 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "A timestamp object associated with the interval"
+          "desc": "A timestamp object associated with the interval",
+          "__exemption": [ "examples" ]
         }
       },
       "returns": {
-        "type": [
-          "Array",
-          "Object",
-          "String"
-        ],
+        "type": ["Array", "Object", "String"],
         "desc": "A Vue style object",
         "examples": [
           "{ color: #ccc; }"
@@ -450,6 +510,8 @@
         "5day",
         "6day",
         "week",
+        "resource",
+        "day-resource",
         "month-interval",
         "custom-interval",
         "all scheduler"
@@ -475,6 +537,8 @@
         "5day",
         "6day",
         "week",
+        "resource",
+        "day-resource",
         "month-interval",
         "custom-interval",
         "all scheduler"
@@ -500,6 +564,8 @@
         "5day",
         "6day",
         "week",
+        "resource",
+        "day-resource",
         "month-interval",
         "custom-interval",
         "all scheduler"
@@ -525,6 +591,8 @@
         "5day",
         "6day",
         "week",
+        "resource",
+        "day-resource",
         "month-interval",
         "custom-interval",
         "all scheduler"
@@ -546,6 +614,8 @@
         "5day",
         "6day",
         "week",
+        "resource",
+        "day-resource",
         "month-interval",
         "custom-interval",
         "all scheduler"
@@ -586,15 +656,12 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "A timestamp object associated with the day"
+          "desc": "A timestamp object associated with the day",
+          "__exemption": [ "examples" ]
         }
       },
       "returns": {
-        "type": [
-          "Array",
-          "Object",
-          "String"
-        ],
+        "type": ["Array", "Object", "String"],
         "desc": "A Vue style object",
         "examples": [
           "{ color: #ccc; }"
@@ -617,15 +684,12 @@
       "params": {
         "timestamp": {
           "type": "Object",
-          "desc": "A timestamp object associated with the day"
+          "desc": "A timestamp object associated with the day",
+          "__exemption": [ "examples" ]
         }
       },
       "returns": {
-        "type": [
-          "Array",
-          "Object",
-          "String"
-        ],
+        "type": ["Array", "Object", "String"],
         "desc": "A Vue style object of classes",
         "examples": [
           "{ 'q-selected-day': true }"
@@ -699,7 +763,25 @@
     "show-day-of-year-label": {
       "type": "Boolean",
       "category": "content",
-      "desc": "Show the say of the year - this occurs in the top right of each day element. If show-month-label is true, then that day is skipped",
+      "desc": "Show the day of the year - this occurs in the top right of each day element. If show-month-label is true, then that day is skipped",
+      "applicable": [
+        "month"
+      ]
+    },
+    "enable-outside-days": {
+      "addedIn": "v2.2.0",
+      "type": "Boolean",
+      "category": "behavior",
+      "desc": "By default, outside days are disabled in month view. Use the property to enable them.",
+      "applicable": [
+        "month"
+      ]
+    },
+    "hide-outside-days": {
+      "addedIn": "v2.2.0",
+      "type": "Boolean",
+      "category": "behavior",
+      "desc": "Hide the labels of outside days",
       "applicable": [
         "month"
       ]
@@ -725,7 +807,9 @@
       "desc": "The maximum height in pixels for the resource height",
       "default": "70",
       "applicable": [
-        "scheduler"
+        "scheduler",
+        "resource",
+        "day-resource"
       ],
       "examples": [
         "resource-height=\"80\"",
@@ -740,7 +824,9 @@
       "category": "style",
       "desc": "The maximum width in pixels for the resource width",
       "applicable": [
-        "scheduler"
+        "scheduler",
+        "resource",
+        "day-resource"
       ],
       "examples": [
         "resource-width=\"120\"",
@@ -755,28 +841,28 @@
         "data": {
           "type": "Object",
           "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
           "definition": {
             "timestamp": {
               "type": "Object",
-              "desc": "A timestamp object associated with the interval"
+              "desc": "A timestamp object associated with the interval",
+              "__exemption": [ "examples" ]
             },
             "index": {
               "type": "Number",
-              "desc": "The resource index"
+              "desc": "The resource index",
+              "__exemption": [ "examples" ]
             },
             "resource": {
               "type": "Object",
-              "desc": "The resource object"
+              "desc": "The resource object",
+              "__exemption": [ "examples" ]
             }
           }
         }
       },
       "returns": {
-        "type": [
-          "Array",
-          "Object",
-          "String"
-        ],
+        "type": ["Array", "Object", "String"],
         "desc": "A Vue style object",
         "examples": [
           "{ color: #ccc; }"
@@ -784,7 +870,9 @@
       },
       "default": "{}",
       "applicable": [
-        "scheduler"
+        "scheduler",
+        "resource",
+        "day-resource"
       ],
       "examples": [
         ":resource-style=\"resourceStyle\""
@@ -794,7 +882,7 @@
       "type": "Array",
       "category": "behavior",
       "addedIn": "v1.2.0",
-      "desc": "An array of two dates (YYYY-mm-dd) for selection purposes",
+      "desc": "An array of two dates in format `YYYY-MM-DD` for selection purposes",
       "applicable": [
         "month"
       ],
@@ -806,7 +894,7 @@
       "type": "Array",
       "category": "model",
       "addedIn": "v1.3.14",
-      "desc": "An array of string dates in the form YYYY-mm-dd that will be selected",
+      "desc": "An array of string dates in the form `YYYY-MM-DD` that will be selected",
       "applicable": [
         "month"
       ],
@@ -815,10 +903,7 @@
       ]
     },
     "mini-mode": {
-      "type": [
-        "Boolean",
-        "String"
-      ],
+      "type": ["Boolean", "String"],
       "category": "behavior",
       "addedIn": "v1.3.0",
       "values": [
@@ -925,13 +1010,3294 @@
       ]
     }
   },
+  "events": {
+    "input": {
+      "desc": "v-model; Emitted when calendar date changes",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "value": {
+          "type": "String",
+          "desc": "In `YYYY-MM-DD` format",
+          "required": true,
+          "__exemption": [ "examples" ]
+        }
+      }
+    },
+    "change": {
+      "desc": "Emitted when the calendar dates change. For instance, if in `month` view, the `start` contains the timestamp object for the 1st of the month, and `end` contains the timestamp object for the last day of the month. For week view it's the first day of the displayed week and last day of the displayed week",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "{start, end}": {
+          "type": "Object",
+          "desc": "The timestamp objects for the first and last valid date being displayed",
+          "__exemption": [ "examples" ]
+        }
+      }
+    },
+    "moved": {
+      "desc": "Emitted when the date is moved",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "timestamp": {
+          "type": "Object",
+          "desc": "The timestamp object of the move. For instance, if in month view, this will be the timestamp object containing the 1st of the month",
+          "__exemption": [ "examples" ]
+        }
+      }
+    },
+    "click:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "contextmenu:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousedown:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseup:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseenter:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseleave:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousemove:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchstart:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchend:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchmove:date": {
+      "desc": "Occurs on date button",
+      "applicable": [
+        "All"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+
+    "click:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "contextmenu:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousedown:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseup:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseenter:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseleave:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousemove:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchstart:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchend:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchmove:day": {
+      "desc": "Occurs on day area",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+
+
+    "click:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "contextmenu:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousedown:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseup:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseenter:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseleave:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousemove:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchstart:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchend:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchmove:workweek": {
+      "desc": "Occurs on workweek",
+      "addedIn": "v1.5.6",
+      "applicable": [
+        "month"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "minimode": {
+                  "type": "Boolean",
+                  "__exemption": [ "examples" ]
+                },
+                "week": {
+                  "type": "Array",
+                  "desc": "An array of timestamp objects representing the week",
+                  "__exemption": [ "examples" ]
+                },
+                "workweekLabel": {
+                  "type": "String",
+                  "desc": "The workweek label",
+                  "examples": [ "18", "22" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+
+    "click:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "contextmenu:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousedown:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseup:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseenter:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseleave:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousemove:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchstart:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchend:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchmove:interval": {
+      "desc": "Occurs on interval area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+
+    "click:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "contextmenu:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousedown:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseup:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseenter:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseleave:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousemove:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchstart:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchend:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchmove:time": {
+      "desc": "Occurs on interval time area",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "resource",
+        "day-resource",
+        "month",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The timestamp object",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+
+    "click:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "contextmenu:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousedown:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseup:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseenter:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseleave:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousemove:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchstart:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchend:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchmove:resource": {
+      "desc": "Occurs on resource area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "resource",
+        "day-resource",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Object contains resource object and resource index",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+
+    "click:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "contextmenu:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousedown:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseup:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseenter:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseleave:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousemove:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchstart:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchend:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchmove:resource:day": {
+      "desc": "Occurs on resource day area",
+      "applicable": [
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "The data object",
+              "__exemption": [ "examples" ],
+              "definition": {
+                "resource": {
+                  "type": "Object",
+                  "desc": "The resource object",
+                  "__exemption": [ "examples" ]
+                },
+                "resourceIndex": {
+                  "type": "Number",
+                  "desc": "The resource index",
+                  "__exemption": [ "examples" ]
+                },
+                "timestamp": {
+                  "type": "Object",
+                  "desc": "The timestamp object",
+                  "__exemption": [ "examples" ]
+                }
+              }
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "click:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "contextmenu:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousedown:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseup:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseenter:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseleave:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousemove:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchstart:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchend:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchmove:column:head": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column header",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "click:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "contextmenu:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousedown:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseup:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseenter:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mouseleave:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "mousemove:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchstart:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchend:column": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    },
+    "touchmove:column:": {
+      "addedIn": "v1.5.0",
+      "desc": "Occurs on column",
+      "applicable": [
+        "week-agenda"
+      ],
+      "params": {
+        "data": {
+          "type": "Object",
+          "desc": "The data passed to the function",
+          "__exemption": [ "examples" ],
+          "definition": {
+            "scope": {
+              "type": "Object",
+              "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used",
+              "__exemption": [ "examples" ]
+            },
+            "event": {
+              "type": "Object",
+              "desc": "JS event object",
+              "__exemption": [ "examples" ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "methods": {
+    "prev": {
+      "desc": "Triggers component to display previous (ex: day, week, month)",
+      "applicable": [ "All"],
+      "__exemption": [ "examples" ]
+    },
+    "next": {
+      "desc": "Triggers component to display next (ex: day, week, month)",
+      "applicable": [ "All"],
+      "__exemption": [ "examples" ]
+    },
+    "move": {
+      "desc": "Triggers component to move for count iterations, depending on positive (forwards) or negative (backwards) value",
+      "applicable": [ "All"],
+      "params": {
+        "count": {
+          "type": "Number",
+          "desc": "The amount of iterations to move (negative for backwards, positive for forwards). If value is 0, emits `today's date` to v-model",
+          "examples": [
+            "-5 (moves 5 iterations backward - if in `month` view, this would be -5 months",
+            "5 (moves 5 iterations forward - if in `day` view, this would be 5 days"
+          ]
+        }
+      }
+    },
+    "moveToToday": {
+      "addedIn": "v2.2.1",
+      "desc": "Emits `today's date` to v-model",
+      "applicable": [ "All"],
+      "__exemption": [ "examples" ]
+    },
+    "updateCurrent": {
+      "desc": "Update various values to be consistent with current date",
+      "applicable": [ "All"],
+      "__exemption": [ "examples" ]
+    },
+    "timeStartPos": {
+      "desc": "Calculates the starting y position of the passed in time",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "time": {
+          "type": "String",
+          "desc": "The time for which a position is needed in 24-hour format (HH:mm)",
+          "examples":[
+            "09:00"
+          ]
+        }
+      },
+      "returns": {
+        "type": "Number",
+        "desc": "The absolute y starting position",
+        "examples": [
+          "120",
+          "482"
+        ]
+      }
+    },
+    "timeStartPosX": {
+      "desc": "Calculates the starting x position of the passed in time",
+      "addedIn": "v2.0.0",
+      "applicable": [
+        "resource",
+        "day-resource"
+      ],
+      "params": {
+        "time": {
+          "type": "String",
+          "desc": "The time for which a position is needed in 24-hour format (HH:mm)",
+          "examples":[
+            "09:00"
+          ]
+        }
+      },
+      "returns": {
+        "type": "Number",
+        "desc": "The absolute x starting position",
+        "examples": [
+          "120",
+          "482"
+        ]
+      }
+    },
+    "timeDurationHeight": {
+      "desc": "Given a duration (in minutes), will return the css height value",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "duration": {
+          "type": ["Number", "String"],
+          "desc": "The number of minutes for the event to calculate it's height",
+          "examples":[
+            "300",
+            "900"
+          ]
+        }
+      },
+      "returns": {
+        "type": "Number",
+        "desc": "The height (in pixels) to be used for the event",
+        "examples": [
+          "80",
+          "120"
+        ]
+      }
+    },
+    "timeDurationWidth": {
+      "desc": "Given a duration (in minutes), will return the css width value",
+      "addedIn": "v2.0.0",
+      "applicable": [
+        "resource",
+        "day-resource"
+      ],
+      "params": {
+        "duration": {
+          "type": ["Number", "String"],
+          "desc": "The number of minutes for the event to calculate it's width",
+          "examples":[
+            "300",
+            "900"
+          ]
+        }
+      },
+      "returns": {
+        "type": "Number",
+        "desc": "The height (in pixels) to be used for the event",
+        "examples": [
+          "80",
+          "120"
+        ]
+      }
+    },
+    "scrollToTime": {
+      "desc": "When on an interval view, scroll to the passed in time (y position)",
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "month-interval",
+        "custom-interval",
+        "scheduler",
+        "week-scheduler",
+        "month-scheduler",
+        "custom-scheduler"
+      ],
+      "params": {
+        "time": {
+          "type": "String",
+          "desc": "The time in which to scoll to. If the time is already visible on the viewport, this function will have no affect.",
+          "examples":[
+            "09:00"
+          ]
+        }
+      }
+    },
+    "scrollToTimeX": {
+      "desc": "When on an resource interval view, scroll to the passed in time (x position)",
+      "addedIn": "v2.0.0",
+      "applicable": [
+        "resource",
+        "day-resource"
+      ],
+      "params": {
+        "time": {
+          "type": "String",
+          "desc": "The time in which to scoll to. If the time is already visible on the viewport, this function will have no affect.",
+          "examples":[
+            "09:00"
+          ]
+        }
+      }
+    }
+  },
   "scopedSlots": {
+    "head-day": {
+      "desc": "Replaces the complete internal day header",
+      "scope": {
+        "timestamp": {
+          "type": "Object",
+          "desc": "Timestamp object",
+          "__exemption": [ "examples" ]
+        },
+        "index": {
+          "type": "Number",
+          "desc": "The index of the iteration",
+          "__exemption": [ "examples" ]
+        },
+        "miniMode": {
+          "type": "Boolean",
+          "desc": "If currently in mini-mode (applied to Month calendars only)",
+          "__exemption": [ "examples" ]
+        }
+      },
+      "applicable": [
+        "day",
+        "2day",
+        "3day",
+        "4day",
+        "5day",
+        "6day",
+        "week",
+        "month-interval",
+        "custom-interval",
+        "all scheduler",
+        "all agenda"
+      ]
+    },
     "day-header": {
       "desc": "index is added if using `column-count` property",
       "scope": {
-        "day": {
+        "timestamp": {
           "type": "Object",
-          "desc": "Timestamp object"
+          "desc": "Timestamp object",
+          "__exemption": [ "examples" ]
+        },
+        "index": {
+          "type": "Number",
+          "desc": "If applicable, the index of the column-header",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -941,9 +4307,15 @@
     "day-header-label": {
       "desc": "Used to replace the label",
       "scope": {
-        "day": {
+        "timestamp": {
           "type": "Object",
-          "desc": "Timestamp object"
+          "desc": "Timestamp object",
+          "__exemption": [ "examples" ]
+        },
+        "shortWeekdayLabel": {
+          "type": "Boolean",
+          "desc": "True if `short-weekday-label` property is set",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -954,9 +4326,10 @@
     "day-body": {
       "desc": "index is added if using `column-count` property",
       "scope": {
-        "day": {
+        "timestamp": {
           "type": "Object",
-          "desc": "Timestamp object"
+          "desc": "Timestamp object",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -969,7 +4342,8 @@
       "scope": {
         "days": {
           "type": "Array",
-          "desc": "An array of timestamp objects that are to be displayed in the container. This slot does not replace the container, but instead, allows you to add to it. Example: use css 'position: absolute` to create a 'current time' bar."
+          "desc": "An array of timestamp objects that are to be displayed in the container. This slot does not replace the container, but instead, allows you to add to it. Example: use css 'position: absolute` to create a 'current time' bar.",
+          "__exemption": [ "examples" ]
         }
       }
     },
@@ -978,7 +4352,8 @@
       "scope": {
         "days": {
           "type": "Array",
-          "desc": "An array of Timestamp objects"
+          "desc": "An array of Timestamp objects",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -990,12 +4365,12 @@
       "scope": {
         "timeStartPos": {
           "type": "Function",
-          "desc": "Calculates the start position of the passed in time",
+          "desc": "Calculates the starting y position of the passed in time",
           "params": {
             "time": {
               "type": "String",
-              "desc": "The time for which a position is needed in 24-hour format (HHmm)",
-              "examples": [
+              "desc": "The time for which a position is needed in 24-hour format (HH:mm)",
+              "examples":[
                 "09:00"
               ]
             }
@@ -1014,12 +4389,9 @@
           "desc": "Given a duration (in seconds), will return the css height value",
           "params": {
             "duration": {
-              "type": [
-                "Number",
-                "String"
-              ],
+              "type": ["Number", "String"],
               "desc": "The number of seconds for the event to calculate it's height",
-              "examples": [
+              "examples":[
                 "300",
                 "900"
               ]
@@ -1042,9 +4414,10 @@
     "column-header-before": {
       "desc": "Use to render items before the column header",
       "scope": {
-        "data": {
+        "timestamp": {
           "type": "Object",
-          "desc": "Timestamp object"
+          "desc": "Timestamp object",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1054,9 +4427,10 @@
     "column-header-after": {
       "desc": "Use to render items after the column header",
       "scope": {
-        "data": {
+        "timestamp": {
           "type": "Object",
-          "desc": "Timestamp object"
+          "desc": "Timestamp object",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1072,7 +4446,8 @@
         },
         "day": {
           "type": "Object",
-          "desc": "A destructured timestamp for the day of the slotted content"
+          "desc": "A destructured timestamp for the day of the slotted content",
+          "__exemption": [ "examples" ]
         },
         "miniMode": {
           "type": "Boolean",
@@ -1088,11 +4463,51 @@
       "scope": {
         "dayLabel": {
           "type": "String",
-          "desc": "The string of the dayLabel"
+          "desc": "The string of the dayLabel",
+          "__exemption": [ "examples" ]
         },
-        "day": {
+        "timestamp": {
           "type": "Object",
-          "desc": "A destructured timestamp for the day of the slotted content"
+          "desc": "A timestamp for the day of the slotted content",
+          "__exemption": [ "examples" ]
+        },
+        "miniMode": {
+          "type": "Boolean",
+          "desc": "true if currently in mini-mode. Handle if you have set mini-mode to `auto`"
+        }
+      },
+      "applicable": [
+        "month"
+      ]
+    },
+    "day-btn": {
+      "addedIn": "v2.2.0",
+      "desc": "Use to replace the `day button`",
+      "scope": {
+        "dayLabel": {
+          "type": "String",
+          "desc": "The string of the dayLabel",
+          "__exemption": [ "examples" ]
+        },
+        "timestamp": {
+          "type": "Object",
+          "desc": "A timestamp for the day of the slotted content",
+          "__exemption": [ "examples" ]
+        },
+        "outside": {
+          "type": "Boolean",
+          "desc": "If this day is considered `outside` the current month",
+          "__exemption": [ "examples" ]
+        },
+        "selectedDate": {
+          "type": "Boolean",
+          "desc": "If this day is a selected date (applicable only for mini-mode)",
+          "__exemption": [ "examples" ]
+        },
+        "activeDate": {
+          "type": "Boolean",
+          "desc": "If this day is the currently selected date (v-model)",
+          "__exemption": [ "examples" ]
         },
         "miniMode": {
           "type": "Boolean",
@@ -1108,11 +4523,13 @@
       "scope": {
         "monthLabel": {
           "type": "String",
-          "desc": "The string of the monthLabel"
+          "desc": "The string of the monthLabel",
+          "__exemption": [ "examples" ]
         },
-        "day": {
+        "timestamp": {
           "type": "Object",
-          "desc": "A destructured timestamp for the day of the slotted content"
+          "desc": "A timestamp for the day of the slotted content",
+          "__exemption": [ "examples" ]
         },
         "miniMode": {
           "type": "Boolean",
@@ -1126,9 +4543,10 @@
     "day-of-year": {
       "desc": "Use to replace the `day of year` label. Not applicable in `mini-mode`",
       "scope": {
-        "data": {
+        "timestamp": {
           "type": "Object",
-          "desc": "Timestamp object"
+          "desc": "Timestamp object",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1140,11 +4558,13 @@
       "scope": {
         "workweekLabel": {
           "type": "String",
-          "desc": "The string for the workweek label"
+          "desc": "The string for the workweek label",
+          "__exemption": [ "examples" ]
         },
         "date": {
           "type": "Object",
-          "desc": "Timestamp object, workWeekLabel and miniMode"
+          "desc": "Timestamp object, workWeekLabel and miniMode",
+          "__exemption": [ "examples" ]
         },
         "miniMode": {
           "type": "Boolean",
@@ -1163,7 +4583,8 @@
       "scope": {
         "week": {
           "type": "Array",
-          "desc": "This is an array of timestamp objects. One for each day of the week to be displayed"
+          "desc": "This is an array of timestamp objects. One for each day of the week to be displayed",
+          "__exemption": [ "examples" ]
         },
         "weekdays": {
           "type": "Array",
@@ -1184,7 +4605,8 @@
       "scope": {
         "data": {
           "type": "Object",
-          "desc": ""
+          "desc": "",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1196,7 +4618,8 @@
       "scope": {
         "data": {
           "type": "Object",
-          "desc": ""
+          "desc": "",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1208,7 +4631,8 @@
       "scope": {
         "data": {
           "type": "Object",
-          "desc": ""
+          "desc": "",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1220,7 +4644,8 @@
       "scope": {
         "data": {
           "type": "Object",
-          "desc": ""
+          "desc": "",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1232,7 +4657,8 @@
       "scope": {
         "data": {
           "type": "Object",
-          "desc": ""
+          "desc": "",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1244,7 +4670,8 @@
       "scope": {
         "data": {
           "type": "Object",
-          "desc": ""
+          "desc": "",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1257,7 +4684,8 @@
       "scope": {
         "data": {
           "type": "Object",
-          "desc": "This is the object passed to properties `left-column-options` or `right-column-options`"
+          "desc": "This is the object passed to properties `left-column-options` or `right-column-options`",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
@@ -1270,1492 +4698,186 @@
       "scope": {
         "data": {
           "type": "Object",
-          "desc": "This is the object passed to properties `left-column-options` or `right-column-options`"
+          "desc": "This is the object passed to properties `left-column-options` or `right-column-options`",
+          "__exemption": [ "examples" ]
         }
       },
       "applicable": [
         "week-agenda"
       ]
-    }
-  },
-  "events": {
-    "input": {
-      "desc": "v-model; Emitted when calendar date changes",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "value": {
-          "type": "String",
-          "desc": "In YYYY-mm-dd format",
-          "required": true
-        }
-      }
     },
-    "change": {
-      "desc": "Emitted when the calendar dates change. For instance, if in `month` view, the `start` contains the timestamp object for the 1st of the month, and `end` contains the timestamp object for the last day of the month. For week view it's the first day of the displayed week and last day of the displayed week",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "start": {
+    "interval-label": {
+      "desc": "Use this slot to change the display of an interval label",
+      "addedIn": "v2.0.0",
+      "scope": {
+        "interval": {
           "type": "Object",
-          "desc": "The timestamp object for the first valid date being displayed"
+          "desc": "The interval object for this label",
+          "__exemption": [ "examples" ]
         },
-        "end": {
-          "type": "Object",
-          "desc": "The timestamp object for the last valid date being displayed"
-        }
-      }
-    },
-    "moved": {
-      "desc": "Emitted when the date is moved",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object of the move. For instance, if in month view, this will be the timestamp object containing the 1st of the month"
-        }
-      }
-    },
-    "click:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "contextmenu:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mousedown:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseup:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseenter:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseleave:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mousemove:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchstart:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchend:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchmove:date": {
-      "desc": "Occurs on date button",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "click:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "contextmenu:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mousedown:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseup:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseenter:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseleave:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mousemove:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchstart:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchend:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchmove:day": {
-      "desc": "Occurs on day area",
-      "applicable": [
-        "month"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "click:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "contextmenu:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mousedown:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseup:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseenter:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseleave:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mousemove:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchstart:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchend:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchmove:interval": {
-      "desc": "Occurs on interval area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "click:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "contextmenu:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mousedown:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseup:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseenter:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mouseleave:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "mousemove:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchstart:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchend:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "touchmove:time": {
-      "desc": "Occurs on interval time area",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "The timestamp object"
-        }
-      }
-    },
-    "click:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "contextmenu:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "mousedown:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "mouseup:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "mouseenter:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "mouseleave:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "mousemove:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "touchstart:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "touchend:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "touchmove:resource": {
-      "desc": "Occurs on resource area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object and resource index"
-        }
-      }
-    },
-    "click:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "contextmenu:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "mousedown:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "mouseup:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "mouseenter:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "mouseleave:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "mousemove:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "touchstart:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "touchend:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "touchmove:resource:day": {
-      "desc": "Occurs on resource day area",
-      "applicable": [
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "timestamp": {
-          "type": "Object",
-          "desc": "Object contains resource object, resource index and the timestamp object"
-        }
-      }
-    },
-    "click:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "contextmenu:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mousedown:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mouseup:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mouseenter:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mouseleave:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mousemove:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "touchstart:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "touchend:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "touchmove:column:head": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column header",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "click:column": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "contextmenu:column": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mousedown:column": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mouseup:column": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mouseenter:column": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mouseleave:column": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "mousemove:column": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "touchstart:column": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "touchend:column": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    },
-    "touchmove:column:": {
-      "addedIn": "v1.5.0",
-      "desc": "Occurs on column",
-      "applicable": [
-        "week-agenda"
-      ],
-      "params": {
-        "data": {
-          "type": "Object",
-          "desc": "Contains the object passed for the column when either property `left-column-options` or `right-column-options` are used"
-        }
-      }
-    }
-  },
-  "methods": {
-    "prev": {
-      "desc": "Triggers component to display previous (ex: day, week, month)",
-      "applicable": [
-        "All"
-      ]
-    },
-    "next": {
-      "desc": "Triggers component to display next (ex: day, week, month)",
-      "applicable": [
-        "All"
-      ]
-    },
-    "move": {
-      "desc": "Triggers component to move for count iterations, depending on positive (forwards) or negative (backwards) value",
-      "applicable": [
-        "All"
-      ],
-      "params": {
-        "count": {
+        "index": {
           "type": "Number",
-          "desc": "The amount of iterations to move (negative for backwards, positive for forwards)",
+          "desc": "The interval index",
+          "__exemption": [ "examples" ]
+        },
+        "label": {
+          "type": "String",
+          "desc": "The interval label",
           "examples": [
-            "-5 (moves 5 iterations backward - if in `month` view, this would be -5 months",
-            "5 (moves 5 iterations forward - if in `day` view, this would be 5 days"
+            "03:00",
+            "3 AM"
           ]
         }
-      }
-    },
-    "updateCurrent": {
-      "desc": "Update various values to be consistent with current date",
+      },
       "applicable": [
-        "All"
+        "resource",
+        "day-resource"
       ]
     },
-    "timeStartPos": {
-      "desc": "Calculates the start position of the passed in time",
-      "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "time": {
+    "resource-header": {
+      "desc": "Use this slot to add to the empty area above resources",
+      "addedIn": "v2.0.0",
+      "scope": {
+        "date": {
           "type": "String",
-          "desc": "The time for which a position is needed in 24-hour format (HHmm)",
+          "desc": "The current date (YYYY-MM-DD)",
           "examples": [
-            "09:00"
+            "2020-05-30"
           ]
+        },
+        "intervals": {
+          "type": "Array",
+          "desc": "An array of timestamps for the intervals that will be displayed",
+          "__exemption": [ "examples" ]
         }
       },
-      "returns": {
-        "type": "Number",
-        "desc": "The absolute y starting position",
-        "examples": [
-          "120",
-          "482"
-        ]
-      }
-    },
-    "timeDurationHeight": {
-      "desc": "Given a duration (in seconds), will return the css height value",
       "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "duration": {
-          "type": [
-            "Number",
-            "String"
-          ],
-          "desc": "The number of seconds for the event to calculate it's height",
-          "examples": [
-            "300",
-            "900"
-          ]
+        "resource",
+        "day-resource"
+      ]
+    },
+    "resource-row": {
+      "desc": "This slot is the complete row, including resource and intervals",
+      "addedIn": "v2.0.0",
+      "scope": {
+        "resource": {
+          "type": "Object",
+          "desc": "A resource object that was passed in within the array of resources",
+          "__exemption": [ "examples" ]
+        },
+        "index": {
+          "type": "Number",
+          "desc": "The resource index from the array",
+          "__exemption": [ "examples" ]
         }
       },
-      "returns": {
-        "type": "Number",
-        "desc": "The height (in pixels) to be used for the event",
-        "examples": [
-          "80",
-          "120"
-        ]
-      }
-    },
-    "scrollToTime": {
-      "desc": "When on an interval view, scroll to the passed in time",
       "applicable": [
-        "day",
-        "2day",
-        "3day",
-        "4day",
-        "5day",
-        "6day",
-        "week",
-        "month-interval",
-        "custom-interval",
-        "scheduler",
-        "week-scheduler",
-        "month-scheduler",
-        "custom-scheduler"
-      ],
-      "params": {
-        "time": {
-          "type": "String",
-          "desc": "The time in which to scoll to. If the time is already visible on the viewport, this function will have no affect.",
-          "examples": [
-            "09:00"
-          ]
+        "resource",
+        "day-resource"
+      ]
+    },
+    "resource-label": {
+      "desc": "Use this slot to replace the resource label",
+      "addedIn": "v2.0.0",
+      "scope": {
+        "resource": {
+          "type": "Object",
+          "desc": "A resource object that was passed in within the array of resources",
+          "__exemption": [ "examples" ]
+        },
+        "index": {
+          "type": "Number",
+          "desc": "The resource index from the array",
+          "__exemption": [ "examples" ]
         }
-      }
+      },
+      "applicable": [
+        "resource",
+        "day-resource"
+      ]
+    },
+    "resource-intervals": {
+      "desc": "Use this slot to place abosolute positioned events",
+      "addedIn": "v2.0.0",
+      "scope": {
+        "resource": {
+          "type": "Object",
+          "desc": "A resource object that was passed in within the array of resources",
+          "__exemption": [ "examples" ]
+        },
+        "intervals": {
+          "type": "Array",
+          "desc": "An array of timestamps for the intervals that will be displayed",
+          "__exemption": [ "examples" ]
+        },
+        "timeStartPosX": {
+          "type": "Function",
+          "desc": "Calculates the starting x position of the passed in time",
+          "params": {
+            "time": {
+              "type": "String",
+              "desc": "The time for which a position is needed in 24-hour format (HH:mm)",
+              "examples":[
+                "09:00"
+              ]
+            }
+          },
+          "returns": {
+            "type": "Number",
+            "desc": "The absolute x starting position",
+            "examples": [
+              "120",
+              "482"
+            ]
+          }
+        },
+        "timeDurationWidth": {
+          "type": "Function",
+          "desc": "Given a duration (in seconds), will return the css width value",
+          "params": {
+            "duration": {
+              "type": ["Number", "String"],
+              "desc": "The number of seconds for the event to calculate it's width",
+              "examples":[
+                "300",
+                "900"
+              ]
+            }
+          },
+          "returns": {
+            "type": "Number",
+            "desc": "The width (in pixels) to be used for the event",
+            "examples": [
+              "80",
+              "120"
+            ]
+          }
+        }
+      },
+      "applicable": [
+        "resource",
+        "day-resource"
+      ]
+    },
+    "resource-interval": {
+      "desc": "Use this slot add to an interval for the specified resource",
+      "addedIn": "v2.0.0",
+      "scope": {
+        "resource": {
+          "type": "Object",
+          "desc": "A resource object that was passed in within the array of resources",
+          "__exemption": [ "examples" ]
+        },
+        "interval": {
+          "type": "Object",
+          "desc": "The interval object",
+          "__exemption": [ "examples" ]
+        }
+      },
+      "applicable": [
+        "resource",
+        "day-resource"
+      ]
     }
   }
 }
