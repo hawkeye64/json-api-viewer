@@ -5,6 +5,8 @@
 
 Use the **JsonApiViewer** component to display json as validated and built via the [Quasar Json Api](https://github.com/hawkeye64/quasar-json-api) library for UI kit (`quasar create myApp --kit ui`). (Note: supports Quasar `dark mode`)
 
+![json-api-viewer showing QCalendar](https://raw.githubusercontent.com/hawkeye64/json-api-viewer/master/images/json-api-viewer--qcalendar.png)
+
 As simple as:
 
 ```html
@@ -26,11 +28,13 @@ export default {
 </script>
 ```
 
-Additional properties:
+Properties:
 
-- `type` - A string. Defaults to `Vue Component`.
-- `starting-tab` - The default starting tab is `props`, but if you have no props, you may want to start with a different tab.
-- `starting-inner-tab` - The default starting inner tab is `model`, but if you have no model in your prop categories, you may want to start with a different inner tab.
+- `title` [String]: Title to use. Ex: `title="QCalendar API"`
+- `json` [String]: The json API. Ex: `:json="api"`
+- `type` [String]: Defaults to `Vue Component`.
+- `starting-tab` [String]: The default starting tab is `props`, but if you have no props, you may want to start with a different tab.
+- `starting-inner-tab` [String]: The default starting inner tab is `model`, but if you have no model in your prop categories, you may want to start with a different inner tab.
 
 # Usage
 
