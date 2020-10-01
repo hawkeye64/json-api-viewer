@@ -9,6 +9,8 @@
 
     &-item
       border-top: 1px solid lightblue !important
+      &:first-child
+        border-top: none !important
 
   &__row
     padding: 8px 16px 4px
@@ -62,10 +64,6 @@
 
 .body--dark, .q-dark
   .component-api
-
-    &__list
-      &-item
-        border-top: 1px solid lightblue !important
 
     &__row
       color: #fff
