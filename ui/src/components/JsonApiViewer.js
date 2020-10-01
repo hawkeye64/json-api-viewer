@@ -72,11 +72,11 @@ export default {
   },
 
   computed: {
-    slugifiedTitle () {
+    __slugifiedTitle () {
       return this.slugify(this.title)
     },
 
-    headings () {
+    __headings () {
       return this.tabs
     }
   },
@@ -245,7 +245,7 @@ export default {
       return h(QToolbarTitle, {
         staticClass: 'example-title',
         on: {
-          click: e => { this.copyHeading(this.slugifiedTitle) }
+          click: e => { this.copyHeading(this.__slugifiedTitle) }
         }
       }, [
         h('span', {
@@ -522,7 +522,7 @@ export default {
     __renderSection (h) {
       return h('section', {
         domProps: {
-          id: this.slugifiedTitle
+          id: this.__slugifiedTitle
         },
         staticClass: 'q-pa-md overflow-auto'
       }, [

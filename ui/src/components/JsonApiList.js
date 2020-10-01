@@ -24,14 +24,14 @@ export default {
   },
 
   computed: {
-    headings () {
+    __headings () {
       return Object.keys(this.json)
     }
   },
 
   methods: {
     __renderItems (h) {
-      return [ ...this.headings.map(heading => h(QItem, {
+      return [ ...this.__headings.map(heading => h(QItem, {
         key: this.name + '-' + heading,
         staticClass: 'component-api__list-item'
       }, [
