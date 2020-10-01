@@ -56,7 +56,8 @@ const builds = [
       },
       output: {
         file: resolve('../dist/index.common.js'),
-        format: 'cjs'
+        format: 'cjs',
+        exports: 'auto'
       }
     },
     build: {
@@ -141,7 +142,7 @@ function build (builds) {
 function genConfig (opts) {
   Object.assign(opts.rollup.input, {
     plugins: rollupPlugins,
-    external: [ 'vue', 'quasar' ]
+    external: [ 'vue', 'quasar', '@quasar/quasar-ui-qmarkdown', '@quasar/quasar-ui-qribbon' ]
   })
 
   Object.assign(opts.rollup.output, {

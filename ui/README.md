@@ -41,6 +41,8 @@ Slots:
 
 - `footer`: Replaces the default footer
 
+Please note: As of v1.1.0, `@quasar/qmarkdown` and `@quasar/qribbon` have been tagged as externals and need to be installed separately instead of being bundled in the npm package.
+
 # Usage
 
 ## Quasar CLI project
