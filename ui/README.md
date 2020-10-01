@@ -35,6 +35,11 @@ Properties:
 - `type` [String]: Defaults to `Vue Component`.
 - `starting-tab` [String]: The default starting tab is `props`, but if you have no props, you may want to start with a different tab.
 - `starting-inner-tab` [String]: The default starting inner tab is `model`, but if you have no model in your prop categories, you may want to start with a different inner tab.
+- `no-footer` [Boolean]: TTurns off the default footer
+
+Slots:
+
+- `footer`: Replaces the default footer
 
 # Usage
 

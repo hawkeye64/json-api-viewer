@@ -49,6 +49,19 @@
         "starting-inner-tab=\"content\"",
         "starting-inner-tab=\"behavior\""
       ]
+    },
+    "no-footer": {
+      "addedIn": "v1.1.0",
+      "type": "Boolean",
+      "category": "behavior",
+      "default": "model",
+      "desc": "Turn off the default footer"
+    }
+  },
+  "slots": {
+    "footer": {
+      "addedIn": "v1.1.0",
+      "desc": "Replaces the footer"
     }
   }
 }

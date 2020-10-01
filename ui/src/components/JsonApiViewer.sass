@@ -1,10 +1,11 @@
+@import 'quasar/src/css/variables.sass'
+
 .component-api
   &__container
     max-height: 600px
 
   &__list
     max-height: 600px
-    // min-height: 600px
 
     &-item
       border-top: 1px solid lightblue !important
@@ -44,6 +45,14 @@
       padding-left: 16px
       display: inline-block
 
+  &__footer
+    height: 20px
+    color: $grey-7
+    border-top: 1px solid lightblue !important
+    font-size: 10px
+    padding-left: 2px
+    padding-right: 2px
+
 .property-name
   font-size: 14px
   line-height: 14px
@@ -75,3 +84,6 @@
 
       &--example
         color: #fff
+
+    &__footer
+      color: #fff

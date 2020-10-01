@@ -23,6 +23,8 @@ import {
   QRibbon
 } from '@quasar/quasar-ui-qribbon'
 
+import { version } from '../../package.json'
+
 export default {
   name: 'JsonApiViewer',
 
@@ -42,7 +44,8 @@ export default {
       default: 'Vue Component'
     },
     startingTab: String,
-    startingInnerTab: String
+    startingInnerTab: String,
+    noFooter: Boolean
   },
 
   data () {
@@ -465,6 +468,16 @@ export default {
       ]))]
     },
 
+    __renderFooter (h) {
+      const slot = this.$slots.footer
+      if (this.noFooter === true) return
+      return h('div', {
+        staticClass: 'component-api__footer row justify-between items-center'
+      }, [
+        slot || h('div', 'Quasar JSON API Viewer v' + version + ' - Created and maintained by Jeff Galbraith (@hawkeye64)')
+      ])
+    },
+
     __renderCard (h) {
       return h(QCard, {
         staticClass: 'no-shadow',
@@ -489,7 +502,8 @@ export default {
             color: this.separatorColor
           }
         }),
-        this.__renderTabPanels(h)
+        this.__renderTabPanels(h),
+        this.__renderFooter(h)
       ])
     },
 
