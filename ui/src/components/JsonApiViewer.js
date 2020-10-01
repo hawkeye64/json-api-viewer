@@ -120,12 +120,17 @@ export default {
           if (this.innerTabContent[props.category] === void 0) {
             this.$set(this.innerTabContent, props.category, {})
           }
-          const apiProps = this.__filterContent(props)
-          if (Object.keys(apiProps).length > 0) {
-            this.$set(this.innerTabContent[props.category], key, apiProps)
+          if (this.__filterKey(key)) {
+            this.$set(this.innerTabContent[props.category], key, props)
           }
           else {
-            delete api.props[key]
+            const apiProps = this.__filterContent(props)
+            if (Object.keys(apiProps).length > 0) {
+              this.$set(this.innerTabContent[props.category], key, apiProps)
+            }
+            else {
+              delete api.props[key]
+            }
           }
         }
 
@@ -159,10 +164,13 @@ export default {
           // loop through inner content
           const propKeys = Object.keys(api[type])
           for (let l = 0; l < propKeys.length; ++l) {
-            const props = api[type][propKeys[l]]
-            const apiProps = this.__filterContent(props)
-            if (Object.keys(apiProps).length === 0) {
-              delete api[type][propKeys[l]]
+            const key = propKeys[l]
+            const props = api[type][key]
+            if (this.__filterKey(key) !== true) {
+              const apiProps = this.__filterContent(props)
+              if (Object.keys(apiProps).length === 0) {
+                delete api[type][key]
+              }
             }
           }
         }
@@ -203,6 +211,10 @@ export default {
     // tests the passed string against the filter
     __filterString (str) {
       return String(str).toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
+    },
+
+    __filterKey (str) {
+      return this.__filterString(str)
     },
 
     __filterArray (arr) {
