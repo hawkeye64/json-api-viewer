@@ -40,7 +40,8 @@ export default {
 
       if (json.returns) {
         name += json.returns.type
-      } else {
+      }
+      else {
         name += 'void 0'
       }
 
@@ -48,7 +49,8 @@ export default {
 
       if (json.params === void 0) {
         name += title + ' ()'
-      } else {
+      }
+      else {
         name += title + ' (' + Object.keys(json.params).join(', ') + ')'
       }
 
@@ -328,7 +330,8 @@ export default {
       let name = this.name
       if (this.type === 'methods') {
         name = this.getMethodName(name, this.json)
-      } else if (this.type === 'events') {
+      }
+      else if (this.type === 'events') {
         name = this.getEventName(name, this.json)
       }
       const level = 0

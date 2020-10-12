@@ -187,13 +187,13 @@ export default {
       for (let i = 0; i < keys.length; ++i) {
         const prop = api[keys[i]]
         const type = Object.prototype.toString.call(prop)
-        if ('[object Array]' === type) {
+        if (type === '[object Array]') {
           if (this.__filterArray(prop)) {
             found = true
             break
           }
         }
-        else if ('[object String]' === type || '[object Number]' === type) {
+        else if (type === '[object String]' || type === '[object Number]') {
           if (this.__filterString(prop)) {
             found = true
             break
@@ -245,7 +245,9 @@ export default {
       return h(QToolbarTitle, {
         staticClass: 'example-title',
         on: {
-          click: e => { this.copyHeading(this.__slugifiedTitle) }
+          click: e => {
+            this.copyHeading(this.__slugifiedTitle)
+          }
         }
       }, [
         h('span', {
@@ -359,7 +361,7 @@ export default {
         h('div', {
           staticClass: 'col'
         }),
-        count > 0 && h(QBadge, [ count ])
+        count > 0 && h(QBadge, [count])
       ])
     },
 
@@ -370,7 +372,9 @@ export default {
           animated: true
         },
         on: {
-          input: v => { this.currentTab = v }
+          input: v => {
+            this.currentTab = v
+          }
         }
       }, [
         this.__renderTabPanel(h)
@@ -378,7 +382,7 @@ export default {
     },
 
     __renderTabPanel (h) {
-      return [ ...Object.keys(this.tabs).map(propKey => h(QTabPanel, {
+      return [...Object.keys(this.tabs).map(propKey => h(QTabPanel, {
         key: propKey + '-panel',
         staticClass: 'q-pa-none',
         props: {
@@ -408,7 +412,7 @@ export default {
         staticClass: 'fit row'
       }, [
         h('div', {
-          staticClass: 'col-auto row no-wrap q-py-lg' + (!this.$q.dark.isActive ? ' bg-grey-2 text-grey-7' : ''),
+          staticClass: 'col-auto row no-wrap q-py-lg' + (!this.$q.dark.isActive ? ' bg-grey-2 text-grey-7' : '')
         }, [
           h(QTabs, {
             staticClass: 'text-caption' + (!this.$q.dark.isActive ? ' bg-grey-2 text-grey-7' : ''),
@@ -422,7 +426,9 @@ export default {
               narrowIndicator: true
             },
             on: {
-              input: v => { this.currentInnerTab = v }
+              input: v => {
+                this.currentInnerTab = v
+              }
             }
           }, [
             ...Object.keys(this.innerTabCount).map(propKey => h(QTab, {
@@ -461,7 +467,9 @@ export default {
 
         },
         on: {
-          input: v => { this.currentInnerTab = v }
+          input: v => {
+            this.currentInnerTab = v
+          }
         }
       }, [
         this.__renderInnerTabPanel(h)
@@ -469,7 +477,7 @@ export default {
     },
 
     __renderInnerTabPanel (h) {
-      return [ ...Object.keys(this.innerTabContent).map(propKey => h(QTabPanel, {
+      return [...Object.keys(this.innerTabContent).map(propKey => h(QTabPanel, {
         key: propKey + '-inner-panel',
         staticClass: 'q-pa-none',
         props: {

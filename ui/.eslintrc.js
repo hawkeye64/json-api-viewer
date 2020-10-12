@@ -3,11 +3,16 @@ module.exports = {
 
   parserOptions: {
     parser: 'babel-eslint',
-    sourceType: 'module'
+    ecmaVersion: 2018,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true
+    }
   },
 
   env: {
-    browser: true
+    browser: true,
+    es6: true
   },
 
   extends: [
@@ -23,10 +28,12 @@ module.exports = {
   ],
 
   globals: {
-    'ga': true, // Google Analytics
-    'cordova': true,
-    '__statics': true,
-    'process': true
+    ga: true, // Google Analytics
+    cordova: true,
+    __statics: true,
+    process: true,
+    Capacitor: true,
+    chrome: true
   },
 
   // add your custom rules here
@@ -47,6 +54,9 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
 
+    'brace-style': [2, 'stroustrup', { allowSingleLine: false }],
+
+    'no-void': 'off',
     // allow console.log during development only
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // allow debugger during development only
