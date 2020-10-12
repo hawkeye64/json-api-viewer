@@ -6,8 +6,11 @@ import JsonApiList from './JsonApiList'
 import {
   QBadge,
   QCard,
+  QCheckbox,
   QIcon,
   QInput,
+  QMenu,
+  // QPopupProxy,
   QSeparator,
   QSpace,
   QTabs,
@@ -16,6 +19,7 @@ import {
   QTabPanel,
   QToolbar,
   QToolbarTitle,
+  ClosePopup,
   extend
 } from 'quasar'
 
@@ -29,6 +33,8 @@ export default {
   name: 'JsonApiViewer',
 
   mixins: [JsonApiViewerMixin],
+
+  directives: { ClosePopup },
 
   props: {
     title: {
@@ -61,7 +67,8 @@ export default {
       innerTabCount: {},
       innerTabContent: {},
       borderColor: 'lightblue',
-      separatorColor: 'light-blue-2'
+      separatorColor: 'light-blue-2',
+      showDeprecated: false
     }
   },
 
@@ -83,6 +90,10 @@ export default {
 
   watch: {
     filter (val) {
+      this.__parseJson(this.json)
+    },
+
+    showDeprecated () {
       this.__parseJson(this.json)
     }
   },
@@ -117,6 +128,10 @@ export default {
         for (let j = 0; j < propKeys.length; ++j) {
           const key = propKeys[j]
           const props = api.props[key]
+          if (props.deprecated !== void 0 && this.showDeprecated !== true) {
+            delete api.props[key]
+            continue
+          }
           if (this.innerTabContent[props.category] === void 0) {
             this.$set(this.innerTabContent, props.category, {})
           }
@@ -166,7 +181,10 @@ export default {
           for (let l = 0; l < propKeys.length; ++l) {
             const key = propKeys[l]
             const props = api[type][key]
-            if (this.__filterKey(key) !== true) {
+            if (props.deprecated !== void 0 && this.showDeprecated !== true) {
+              delete api[type][key]
+            }
+            else if (this.__filterKey(key) !== true) {
               const apiProps = this.__filterContent(props)
               if (Object.keys(apiProps).length === 0) {
                 delete api[type][key]
@@ -317,34 +335,76 @@ export default {
           this.$q.screen.gt.xs && this.type
         ]),
         h(QSpace),
-        this.$q.screen.width >= 385 && this.__renderFilter(h)
+        this.$q.screen.width >= 385 && this.__renderFilter(h),
+        this.__renderMenu(h)
+      ])
+    },
+
+    __renderMenu (h) {
+      return h(QIcon, {
+        staticClass: 'cursor-pointer text-grey',
+        props: {
+          name: 'menu',
+          size: 'md'
+        }
+      }, [
+        h(QMenu, [
+          h('div', {
+            staticClass: 'row no-wrap q-pa-md'
+          }, [
+            h('div', {
+              staticClass: 'column'
+            }, [
+              h(QCheckbox, {
+                props: {
+                  value: this.showDeprecated,
+                  label: 'Show deprecated'
+                },
+                directives: [{
+                  name: 'close-popup'
+                }],
+                on: {
+                  input: val => {
+                    this.showDeprecated = val
+                  }
+                }
+              })
+            ])
+          ])
+        ])
       ])
     },
 
     __renderTabs (h) {
-      return h(QTabs, {
-        staticClass: 'text-caption' + (!this.$q.dark.isActive ? ' bg-grey-2 text-grey-7' : ''),
-        props: {
-          value: this.currentTab,
-          dense: true,
-          activeColor: this.$q.dark.isActive ? 'yellow' : 'primary',
-          indicatorColor: this.$q.dark.isActive ? 'yellow' : 'primary',
-          align: 'left',
-          narrowIndicator: true
-        },
-        on: {
-          input: v => { this.currentTab = v }
-        }
+      return h('div', {
+        staticClass: 'row justify-between items-center no-wrap' + (!this.$q.dark.isActive ? ' bg-grey-2 text-grey-7' : '')
       }, [
-        ...Object.keys(this.tabs).map(propKey => h(QTab, {
-          key: propKey + '-tab',
+        h(QTabs, {
+          staticClass: 'col-grow text-caption',
           props: {
-            name: propKey
+            value: this.currentTab,
+            dense: true,
+            activeColor: this.$q.dark.isActive ? 'yellow' : 'primary',
+            indicatorColor: this.$q.dark.isActive ? 'yellow' : 'primary',
+            align: 'left',
+            narrowIndicator: true
           },
-          scopedSlots: {
-            default: () => this.__renderTabSlot(h, propKey, this.tabs[propKey])
+          on: {
+            input: v => {
+              this.currentTab = v
+            }
           }
-        }))
+        }, [
+          ...Object.keys(this.tabs).map(propKey => h(QTab, {
+            key: propKey + '-tab',
+            props: {
+              name: propKey
+            },
+            scopedSlots: {
+              default: () => this.__renderTabSlot(h, propKey, this.tabs[propKey])
+            }
+          }))
+        ])
       ])
     },
 

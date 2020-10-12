@@ -29,6 +29,14 @@ export default {
     json: {
       type: Object,
       required: true
+    },
+    deprecatedColor: {
+      type: String,
+      default: 'yellow-8'
+    },
+    deprecatedBackground: {
+      type: String,
+      default: 'red-8'
     }
   },
 
@@ -78,7 +86,9 @@ export default {
       }, [
         this.__renderName(h, name, NAME_PROP_COLOR[level]),
         this.__renderType(h, json),
-        this.__renderAddedIn(h, json),
+        this.json.removedIn === void 0 && this.__renderDeprecated(h, json),
+        this.json.deprecated === void 0 && this.__renderAddedIn(h, json),
+        this.__renderRemovedIn(h, json),
         this.__renderRequired(h, json),
         this.__renderSync(h, json),
         this.__renderDefault(h, json),
@@ -275,6 +285,28 @@ export default {
       ])
     },
 
+    __renderDeprecated (h, json) {
+      if (json.deprecated === void 0) return ''
+      return h('div', {
+        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
+      }, [
+        h('div', {
+          staticClass: 'component-api__row--label'
+        }, [
+          h('span', {
+            staticClass: 'rounded-borders ' + 'text-' + this.deprecatedColor + ' ' + 'bg-' + this.deprecatedBackground
+          }, 'Deprecated')
+        ]),
+        h('div', {
+          staticClass: 'component-api__row--value'
+        }, [
+          h('span', {
+            staticClass: 'rounded-borders ' + 'text-' + this.deprecatedColor + ' ' + 'bg-' + this.deprecatedBackground
+          }, json.deprecated)
+        ])
+      ])
+    },
+
     __renderAddedIn (h, json) {
       if (json.addedIn === void 0) return ''
       return h('div', {
@@ -287,6 +319,22 @@ export default {
           staticClass: 'component-api__row--value'
         }, [
           h('div', json.addedIn)
+        ])
+      ])
+    },
+
+    __renderRemovedIn (h, json) {
+      if (json.removedIn === void 0) return ''
+      return h('div', {
+        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
+      }, [
+        h('div', {
+          staticClass: 'component-api__row--label'
+        }, 'Removed in'),
+        h('div', {
+          staticClass: 'component-api__row--value'
+        }, [
+          h('div', json.removedIn)
         ])
       ])
     },
@@ -340,7 +388,9 @@ export default {
       }, [
         this.__renderName(h, name, NAME_PROP_COLOR[level]),
         this.__renderType(h, this.json),
-        this.__renderAddedIn(h, this.json),
+        this.json.removedIn === void 0 && this.__renderDeprecated(h, this.json),
+        this.json.deprecated === void 0 && this.__renderAddedIn(h, this.json),
+        this.__renderRemovedIn(h, this.json),
         this.__renderRequired(h, this.json),
         this.__renderSync(h, this.json),
         this.__renderDefault(h, this.json),
