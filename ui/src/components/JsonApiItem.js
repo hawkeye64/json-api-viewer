@@ -37,6 +37,14 @@ export default {
     deprecatedBackground: {
       type: String,
       default: 'red-8'
+    },
+    removedColor: {
+      type: String,
+      default: 'yellow-8'
+    },
+    removedBackground: {
+      type: String,
+      default: 'red-8'
     }
   },
 
@@ -86,9 +94,9 @@ export default {
       }, [
         this.__renderName(h, name, NAME_PROP_COLOR[level]),
         this.__renderType(h, json),
-        this.json.removedIn === void 0 && this.__renderDeprecated(h, json),
-        this.json.deprecated === void 0 && this.__renderAddedIn(h, json),
-        this.__renderRemovedIn(h, json),
+        this.json.removedIn !== void 0 && this.__renderRemovedIn(h, json),
+        this.json.removedIn === void 0 && this.json.deprecated !== void 0 && this.__renderDeprecated(h, json),
+        this.json.removedIn === void 0 && this.json.deprecated === void 0 && this.__renderAddedIn(h, json),
         this.__renderRequired(h, json),
         this.__renderSync(h, json),
         this.__renderDefault(h, json),
@@ -285,6 +293,30 @@ export default {
       ])
     },
 
+    __renderRemovedIn (h, json) {
+      if (json.removedIn === void 0) return ''
+      return h('div', {
+        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
+      }, [
+        h('div', {
+          staticClass: 'component-api__row--label'
+        }, [
+          h('span', {
+            staticClass: 'rounded-borders ' + 'text-' + this.removedColor + ' ' + 'bg-' + this.removedBackground
+          }, 'Removed in')
+        ]),
+        h('div', {
+          staticClass: 'component-api__row--value'
+        }, [
+          h('div', [
+            h('span', {
+              staticClass: 'rounded-borders ' + 'text-' + this.deprecatedColor + ' ' + 'bg-' + this.deprecatedBackground
+            }, json.removedIn)
+          ])
+        ])
+      ])
+    },
+
     __renderDeprecated (h, json) {
       if (json.deprecated === void 0) return ''
       return h('div', {
@@ -319,22 +351,6 @@ export default {
           staticClass: 'component-api__row--value'
         }, [
           h('div', json.addedIn)
-        ])
-      ])
-    },
-
-    __renderRemovedIn (h, json) {
-      if (json.removedIn === void 0) return ''
-      return h('div', {
-        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Removed in'),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h('div', json.removedIn)
         ])
       ])
     },

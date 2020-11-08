@@ -68,7 +68,8 @@ export default {
       innerTabContent: {},
       borderColor: 'lightblue',
       separatorColor: 'light-blue-2',
-      showDeprecated: false
+      showDeprecated: false,
+      showRemoved: false
     }
   },
 
@@ -94,6 +95,10 @@ export default {
     },
 
     showDeprecated () {
+      this.__parseJson(this.json)
+    },
+
+    showRemoved () {
       this.__parseJson(this.json)
     }
   },
@@ -129,6 +134,10 @@ export default {
           const key = propKeys[j]
           const props = api.props[key]
           if (props.deprecated !== void 0 && this.showDeprecated !== true) {
+            delete api.props[key]
+            continue
+          }
+          if (props.removedIn !== void 0 && this.showRemoved !== true) {
             delete api.props[key]
             continue
           }
@@ -182,6 +191,9 @@ export default {
             const key = propKeys[l]
             const props = api[type][key]
             if (props.deprecated !== void 0 && this.showDeprecated !== true) {
+              delete api[type][key]
+            }
+            if (props.removedIn !== void 0 && this.showRemoved !== true) {
               delete api[type][key]
             }
             else if (this.__filterKey(key) !== true) {
@@ -366,6 +378,20 @@ export default {
                 on: {
                   input: val => {
                     this.showDeprecated = val
+                  }
+                }
+              }),
+              h(QCheckbox, {
+                props: {
+                  value: this.showRemoved,
+                  label: 'Show removed'
+                },
+                directives: [{
+                  name: 'close-popup'
+                }],
+                on: {
+                  input: val => {
+                    this.showRemoved = val
                   }
                 }
               })
