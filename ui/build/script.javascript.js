@@ -5,7 +5,6 @@ const rollup = require('rollup')
 const uglify = require('uglify-es')
 const buble = require('@rollup/plugin-buble')
 const json = require('@rollup/plugin-json')
-const cjs = require('@rollup/plugin-commonjs')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 
 const buildConf = require('./config')
@@ -20,16 +19,9 @@ const nodeResolveConfig = {
   preferBuiltins: false
 }
 
-const cjsConfig = {
-  include: [
-    /node_modules/
-  ]
-}
-
 const rollupPlugins = [
   nodeResolve(nodeResolveConfig),
   json(),
-  cjs(cjsConfig),
   buble(bubleConfig)
 ]
 
@@ -105,10 +97,10 @@ function resolve (_path) {
 function addAssets (builds, type, injectName) {
   const
     files = fs.readdirSync(resolve('../../ui/src/components/' + type)),
-    plugins = [ buble(bubleConfig) ],
+    plugins = [buble(bubleConfig)],
     outputDir = resolve(`../dist/${type}`)
 
-    fse.mkdirp(outputDir)
+  fse.mkdirp(outputDir)
 
   files
     .filter(file => file.endsWith('.js'))
@@ -142,7 +134,7 @@ function build (builds) {
 function genConfig (opts) {
   Object.assign(opts.rollup.input, {
     plugins: rollupPlugins,
-    external: [ 'vue', 'quasar', '@quasar/quasar-ui-qmarkdown', '@quasar/quasar-ui-qribbon' ]
+    external: ['vue', 'quasar', '@quasar/quasar-ui-qmarkdown', '@quasar/quasar-ui-qribbon']
   })
 
   Object.assign(opts.rollup.output, {
@@ -201,6 +193,7 @@ function buildEntry (config) {
 }
 
 function injectVueRequirement (code) {
+  // eslint-disable-next-line quotes
   const index = code.indexOf(`Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue`)
 
   if (index === -1) {
