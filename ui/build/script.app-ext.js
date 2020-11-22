@@ -27,8 +27,8 @@ module.exports.syncAppExt = function (both = true) {
 
   // read app-ext package.json
   const appExtFile = resolvePath('app-extension/package.json')
-  let appExtJson = require(appExtFile),
-    finished = false
+  const appExtJson = require(appExtFile)
+  let finished = false
 
   // sync version numbers
   if (both === true) {
@@ -52,9 +52,9 @@ module.exports.syncAppExt = function (both = true) {
 
   if (finished === true) {
     writeJson(appExtFile, appExtJson)
-    console.log(` ⭐️ App Extension ${blue(appExtJson.name)} synced.\n`)
+    console.log(` ⭐️ App Extension version ${blue(appExtJson.name)} synced with UI version.\n`)
     return
   }
 
-  console.error(`   App Extension version and dependency NOT synced.\n`)
+  console.error('   App Extension version and dependency NOT synced.\n')
 }

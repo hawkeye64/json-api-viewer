@@ -15,7 +15,6 @@ module.exports = {
 
   env: {
     browser: true,
-    jest: true,
     es6: true
   },
 
@@ -41,7 +40,6 @@ module.exports = {
     // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
     // required to lint *.vue files
     'vue',
-    'jest',
     'quasar'
   ],
 
@@ -76,12 +74,6 @@ module.exports = {
 
     'quasar/no-invalid-props': 'error',
     'quasar/no-invalid-qfield-usage': 'error',
-
-    'jest/no-disabled-tests': 'warn',
-    'jest/no-focused-tests': 'error',
-    'jest/no-identical-title': 'error',
-    'jest/prefer-to-have-length': 'warn',
-    'jest/valid-expect': 'error',
 
     'no-void': 'off',
     // allow console.log during development only
