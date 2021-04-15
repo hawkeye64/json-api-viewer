@@ -1,22 +1,27 @@
 <template>
   <q-page padding>
-    <json-api-viewer title="QCalendar API" :json="calendarApi" />
-    <json-api-viewer title="QCalendar Exports" :json="timestampApi" type="Exports" starting-tab="methods" />
-    <json-api-viewer title="QMediaPlayer API" :json="mediaPlayerApi" />
+    <json-api-viewer
+      title="QCalendar API"
+      :json="json"
+    />
   </q-page>
 </template>
 
 <script>
-import calendarApi from '../api/QCalendar.json'
-import timestampApi from '../api/timestamp.json'
-import mediaPlayerApi from '../api/QMediaPlayer.json'
-export default {
-  data () {
+import { defineComponent } from 'vue'
+import Api from '../assets/api/QCalendar.json'
+
+export default defineComponent({
+  setup () {
     return {
-      calendarApi,
-      timestampApi,
-      mediaPlayerApi
+      json: Api
     }
   }
-}
+})
 </script>
+
+<style lang="sass" scoped>
+.directive-target
+  width: 50px
+  height: 50px
+</style>

@@ -1,11 +1,14 @@
+import {
+  defineComponent,
+  h
+} from 'vue'
+
 // Utils
 import {
   QBadge
 } from 'quasar'
 
-import {
-  QMarkdown
-} from '@quasar/quasar-ui-qmarkdown'
+import 'prismjs'
 
 const NAME_PROP_COLOR = [
   'bg-orange-8',
@@ -14,7 +17,7 @@ const NAME_PROP_COLOR = [
   'bg-warning'
 ]
 
-export default {
+export default defineComponent({
   name: 'JsonApiItem',
 
   props: {
@@ -48,8 +51,26 @@ export default {
     }
   },
 
-  methods: {
-    getMethodName (title, json) {
+  setup (props, { slots }) {
+    function highlight (str, lang) {
+      if (lang === '') {
+        lang = 'js'
+      }
+      else if (lang === 'vue' || lang === 'html') {
+        lang = 'html'
+      }
+
+      if (Prism.languages[ lang ] !== undefined) {
+        const code = Prism.highlight(str, Prism.languages[ lang ], lang)
+
+        return '<pre class="q-markdown--code">'
+          + `<code class="q-markdown--code__inner language-${ lang }">${ code }</code></pre>\n`
+      }
+
+      return ''
+    }
+
+    function getMethodName (title, json) {
       let name
 
       name = ' ['
@@ -71,359 +92,441 @@ export default {
       }
 
       return name
-    },
+    }
 
-    getEventName () {
-      let name = '@' + this.name + ' => function'
+    function getEventName () {
+      let name = '@' + props.name + ' => function'
 
-      if (this.json.params === void 0) {
+      if (props.json.params === void 0) {
         return name + ' ()'
       }
 
-      name += ' (' + Object.keys(this.json.params).join(', ') + ')'
+      name += ' (' + Object.keys(props.json.params).join(', ') + ')'
 
       return name
-    },
+    }
 
-    __renderSubitem (h, name, json, level = 0) {
+    function __renderSubitem (name, json, level = 0) {
       if (json.type === 'Function') {
-        name = this.getMethodName(name, json)
+        name = getMethodName(name, json)
       }
       return h('div', {
-        staticClass: 'component-api__row component-api__row--bordered row'
-      }, [
-        this.__renderName(h, name, NAME_PROP_COLOR[level]),
-        this.__renderType(h, json),
-        this.json.removedIn !== void 0 && this.__renderRemovedIn(h, json),
-        this.json.removedIn === void 0 && this.json.deprecated !== void 0 && this.__renderDeprecated(h, json),
-        this.json.removedIn === void 0 && this.json.deprecated === void 0 && this.__renderAddedIn(h, json),
-        this.__renderRequired(h, json),
-        this.__renderSync(h, json),
-        this.__renderDefault(h, json),
-        this.__renderApplicable(h, json),
+        class: 'component-api__row component-api__row--bordered row'
+      }, {
+        default: () => [
+          __renderName(name, NAME_PROP_COLOR[ level ]),
+          __renderType(json),
+          props.json.removedIn !== void 0 && __renderRemovedIn(json),
+          props.json.removedIn === void 0 && props.json.deprecated !== void 0 && __renderDeprecated(json),
+          props.json.removedIn === void 0 && props.json.deprecated === void 0 && __renderAddedIn(json),
+          __renderRequired(json),
+          __renderSync(json),
+          __renderDefault(json),
+          __renderApplicable(json),
 
-        this.__renderDesc(h, json),
-        this.__renderValues(h, json),
-        this.__renderExamples(h, json),
-        this.__renderParams(h, json, level + 1),
-        this.__renderDefinitions(h, json, level + 1),
-        this.__renderScope(h, json, level + 1),
-        this.__renderReturns(h, json, level + 1)
-      ])
-    },
+          __renderDesc(json),
+          __renderValues(json),
+          __renderExamples(json),
+          __renderParams(json, level + 1),
+          __renderDefinitions(json, level + 1),
+          __renderScope(json, level + 1),
+          __renderReturns(json, level + 1)
+        ]
+      })
+    }
 
-    __renderParams (h, json, level = 0) {
+    function __renderParams (json, level = 0) {
       if (json.params === void 0) return ''
       const keys = Object.keys(json.params)
       return h('div', {
-        staticClass: 'component-api__row--item full-width'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Parameter' + (Object.keys(json.params).length > 1 ? 's' : '')),
-        h('div', {
-        }, [
-          keys.map(key => this.__renderSubitem(h, key, json.params[key], level))
-        ])
-      ])
-    },
+        class: 'component-api__row--item full-width'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Parameter' + (Object.keys(json.params).length > 1 ? 's' : '')),
+          h('div', {
+          }, {
+            default: () => [
+              keys.map(key => __renderSubitem(key, json.params[ key ], level))
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderDefinitions (h, json, level = 0) {
+    function __renderDefinitions (json, level = 0) {
       if (json.definition === void 0) return ''
       const keys = Object.keys(json.definition)
       return h('div', {
-        staticClass: 'component-api__row--item full-width'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Definition' + (Object.keys(json.definition).length > 1 ? 's' : '')),
-        h('div', {
-        }, [
-          keys.map(key => this.__renderSubitem(h, key, json.definition[key], level))
-        ])
-      ])
-    },
+        class: 'component-api__row--item full-width'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Definition' + (Object.keys(json.definition).length > 1 ? 's' : '')),
+          h('div', {
+          }, {
+            default: () => [
+              keys.map(key => __renderSubitem(key, json.definition[ key ], level))
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderScope (h, json, level = 0) {
+    function __renderScope (json, level = 0) {
       if (json.scope === void 0) return ''
       const keys = Object.keys(json.scope)
       return h('div', {
-        staticClass: 'component-api__row--item full-width'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Scope'),
-        h('div', {
-        }, [
-          keys.map(key => this.__renderSubitem(h, key, json.scope[key], level))
-        ])
-      ])
-    },
+        class: 'component-api__row--item full-width'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Scope'),
+          h('div', {
+          }, {
+            default: () => [
+              keys.map(key => __renderSubitem(key, json.scope[ key ], level))
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderReturns (h, json, level = 0) {
+    function __renderReturns (json, level = 0) {
       if (json.returns === void 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item full-width'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Returns'),
-        h('div', {
-        }, [
-          json.returns === null && 'null',
-          json.returns !== null && this.__renderSubitem(h, void 0, json.returns, level)
-        ])
-      ])
-    },
+        class: 'component-api__row--item full-width'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Returns'),
+          h('div', {
+          }, {
+            default: () => [
+              json.returns === null && 'null',
+              json.returns !== null && __renderSubitem(void 0, json.returns, level)
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderValues (h, json) {
+    function __renderValues (json) {
       if (json.values === void 0 || json.values.length <= 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-auto'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Value' + (json.values.length > 1 ? 's' : '')),
-        h('div', {
-          staticClass: 'component-api__row--values'
-        }, json.values.join(', '))
-      ])
-    },
+        class: 'component-api__row--item col-auto'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Value' + (json.values.length > 1 ? 's' : '')),
+          h('div', {
+            class: 'component-api__row--values'
+          }, json.values.join(', '))
+        ]
+      })
+    }
 
-    __renderExample (h, example) {
-      const json = '```js\n' + example + '\n```'
-      return h(QMarkdown, {
-        staticClass: 'component-api__row--example'
-      }, json)
-    },
+    function __renderExample (example) {
+      const inner = highlight(example, 'js')
 
-    __renderExamples (h, json) {
+      return h('div', {
+        class: 'component-api__row--example',
+        innerHtml: inner
+      })
+    }
+
+    function __renderExamples (json) {
       if (json.examples === void 0 || json.examples.length <= 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-auto'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Example' + (json.examples.length > 1 ? 's' : '')),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          json.examples.map((example, index) => this.__renderExample(h, example))
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-auto'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Example' + (json.examples.length > 1 ? 's' : '')),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              json.examples.map((example, index) => __renderExample(example))
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderDesc (h, json) {
-      if (json.desc === void 0) return ''
+    function __renderDesc (json) {
+      if (json.desc === void 0) return
+      // const inner = highlight(json.desc, 'md')
+
       return h('div', {
-        staticClass: 'component-api__row--item full-width'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Description'),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h(QMarkdown, json.desc)
-        ])
-      ])
-    },
+        class: 'component-api__row--item full-width'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Description'),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h('div', {
+                // innerHTML: inner
+              }, json.desc)
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderSync (h, json) {
+    function __renderSync (json) {
       if (json.sync === void 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Sync'),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h('div', json.sync)
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-xs-12 col-sm-4'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Sync'),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h('div', json.sync)
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderRequired (h, json) {
+    function __renderRequired (json) {
       if (json.required === void 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Required'),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h('div', json.required)
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-xs-12 col-sm-4'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Required'),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h('div', json.required)
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderApplicable (h, json) {
+    function __renderApplicable (json) {
       if (json.applicable === void 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Applicable'),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h('div', json.applicable.join(', '))
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-xs-12 col-sm-4'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Applicable'),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h('div', json.applicable.join(', '))
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderDefault (h, json) {
+    function __renderDefault (json) {
       if (json.default === void 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Default'),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h('div', json.default)
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-xs-12 col-sm-4'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Default'),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h('div', json.default)
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderRemovedIn (h, json) {
+    function __renderRemovedIn (json) {
       if (json.removedIn === void 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, [
-          h('span', {
-            staticClass: 'rounded-borders ' + 'text-' + this.removedColor + ' ' + 'bg-' + this.removedBackground
-          }, 'Removed in')
-        ]),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h('div', [
-            h('span', {
-              staticClass: 'rounded-borders ' + 'text-' + this.deprecatedColor + ' ' + 'bg-' + this.deprecatedBackground
-            }, json.removedIn)
-          ])
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-xs-12 col-sm-4'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, {
+            default: () => [
+              h('span', {
+                class: 'rounded-borders text-' + props.removedColor + ' bg-' + props.removedBackground
+              }, 'Removed in')
+            ]
+          }),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h('div', {
+                default: () => [
+                  h('span', {
+                    class: 'rounded-borders text-' + props.deprecatedColor + ' bg-' + props.deprecatedBackground
+                  }, json.removedIn)
+                ]
+              })
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderDeprecated (h, json) {
+    function __renderDeprecated (json) {
       if (json.deprecated === void 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, [
-          h('span', {
-            staticClass: 'rounded-borders ' + 'text-' + this.deprecatedColor + ' ' + 'bg-' + this.deprecatedBackground
-          }, 'Deprecated')
-        ]),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h('span', {
-            staticClass: 'rounded-borders ' + 'text-' + this.deprecatedColor + ' ' + 'bg-' + this.deprecatedBackground
-          }, json.deprecated)
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-xs-12 col-sm-4'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, {
+            default: () => [
+              h('span', {
+                class: 'rounded-borders text-' + props.deprecatedColor + ' bg-' + props.deprecatedBackground
+              }, 'Deprecated')
+            ]
+          }),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h('span', {
+                class: 'rounded-borders text-' + props.deprecatedColor + ' bg-' + props.deprecatedBackground
+              }, json.deprecated)
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderAddedIn (h, json) {
+    function __renderAddedIn (json) {
       if (json.addedIn === void 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Added in'),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h('div', json.addedIn)
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-xs-12 col-sm-4'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Added in'),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h('div', json.addedIn)
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderType (h, json) {
+    function __renderType (json) {
       if (json.type === void 0) return ''
       const type = Array.isArray(json.type) ? json.type.join(' | ') : json.type
       return h('div', {
-        staticClass: 'component-api__row--item col-xs-12 col-sm-4'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Type'),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h('div', type)
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-xs-12 col-sm-4'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Type'),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h('div', type)
+            ]
+          })
+        ]
+      })
+    }
 
-    __renderName (h, name, color) {
+    function __renderName (name, color) {
       if (name === void 0) return ''
       return h('div', {
-        staticClass: 'component-api__row--item col-grow'
-      }, [
-        h('div', {
-          staticClass: 'component-api__row--label'
-        }, 'Name'),
-        h('div', {
-          staticClass: 'component-api__row--value'
-        }, [
-          h(QBadge, {
-            staticClass: `property-name ${color}`
-          }, name)
-        ])
-      ])
-    },
+        class: 'component-api__row--item col-grow'
+      }, {
+        default: () => [
+          h('div', {
+            class: 'component-api__row--label'
+          }, 'Name'),
+          h('div', {
+            class: 'component-api__row--value'
+          }, {
+            default: () => [
+              h(QBadge, {
+                class: `property-name ${ color }`
+              }, {
+                default: () => name
+              })
+            ]
+          })
+        ]
+      })
+    }
 
-    __render (h) {
-      let name = this.name
-      if (this.type === 'methods') {
-        name = this.getMethodName(name, this.json)
+    function __render () {
+      let name = props.name
+      if (props.type === 'methods') {
+        name = getMethodName(name, props.json)
       }
-      else if (this.type === 'events') {
-        name = this.getEventName(name, this.json)
+      else if (props.type === 'events') {
+        name = getEventName(name, props.json)
       }
       const level = 0
       return h('div', {
-        staticClass: 'row full-width'
-      }, [
-        this.__renderName(h, name, NAME_PROP_COLOR[level]),
-        this.__renderType(h, this.json),
-        this.json.removedIn === void 0 && this.__renderDeprecated(h, this.json),
-        this.json.deprecated === void 0 && this.__renderAddedIn(h, this.json),
-        this.__renderRemovedIn(h, this.json),
-        this.__renderRequired(h, this.json),
-        this.__renderSync(h, this.json),
-        this.__renderDefault(h, this.json),
-        this.__renderApplicable(h, this.json),
+        class: 'row full-width'
+      }, {
+        default: () => [
+          __renderName(name, NAME_PROP_COLOR[ level ]),
+          __renderType(props.json),
+          props.json.removedIn === void 0 && __renderDeprecated(props.json),
+          props.json.deprecated === void 0 && __renderAddedIn(props.json),
+          __renderRemovedIn(props.json),
+          __renderRequired(props.json),
+          __renderSync(props.json),
+          __renderDefault(props.json),
+          __renderApplicable(props.json),
 
-        this.__renderDesc(h, this.json),
-        this.__renderValues(h, this.json),
-        this.__renderExamples(h, this.json),
-        this.__renderParams(h, this.json, level + 1),
-        this.__renderDefinitions(h, this.json, level + 1),
-        this.__renderScope(h, this.json, level + 1),
-        this.__renderReturns(h, this.json, level + 1)
-      ])
+          __renderDesc(props.json),
+          __renderValues(props.json),
+          __renderExamples(props.json),
+          __renderParams(props.json, level + 1),
+          __renderDefinitions(props.json, level + 1),
+          __renderScope(props.json, level + 1),
+          __renderReturns(props.json, level + 1)
+        ]
+      })
     }
-  },
 
-  render (h) {
-    return this.__render(h)
+    function render () {
+      return __render()
+    }
+
+    return () => render()
   }
-}
+})

@@ -1,4 +1,6 @@
-import Vue from 'vue'
-import Viewer from 'quasar-ui-json-api-viewer'
+import { boot } from 'quasar/wrappers'
+import VuePlugin from 'quasar-ui-json-api-viewer'
 
-Vue.use(Viewer)
+export default boot(({ app }) => {
+  app.use(VuePlugin)
+})

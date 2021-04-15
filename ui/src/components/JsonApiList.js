@@ -1,11 +1,18 @@
-// Utils
-import JsonApiItem from './JsonApiItem'
+import {
+  computed,
+  defineComponent,
+  h
+} from 'vue'
+
 import {
   QItem,
   QList
 } from 'quasar'
 
-export default {
+// Utils
+import JsonApiItem from './JsonApiItem'
+
+export default defineComponent({
   name: 'JsonApiList',
 
   props: {
@@ -19,51 +26,43 @@ export default {
     }
   },
 
-  data () {
-    return {}
-  },
+  setup (props) {
+    const __headings = computed(() => {
+      return Object.keys(props.json)
+    })
 
-  computed: {
-    __headings () {
-      return Object.keys(this.json)
-    }
-  },
-
-  methods: {
-    __renderItems (h) {
-      return [ ...this.__headings.map(heading => h(QItem, {
-        key: this.name + '-' + heading,
-        staticClass: 'component-api__list-item'
-      }, [
-        h(JsonApiItem, {
-          props: {
+    function __renderItems () {
+      return [...__headings.value.map(heading => h(QItem, {
+        key: props.name + '-' + heading,
+        class: 'component-api__list-item'
+      }, {
+        default: () => [
+          h(JsonApiItem, {
             name: heading,
-            type: this.name,
-            json: this.json[heading]
-          }
-        })
-      ]))]
-    },
+            type: props.name,
+            json: props.json[ heading ]
+          })
+        ]
+      }))]
+    }
 
-    __render (h) {
-      const content = Object.keys(this.json).length !== 0
-        ? this.__renderItems(h)
-        : h('div', { staticClass: 'q-pa-md text-grey-7' }, [
-            'No matching entries found. Please refine the filter.'
-          ])
+    function __render () {
+      const content = Object.keys(props.json).length !== 0
+        ? __renderItems()
+        : h('div', { staticClass: 'q-pa-md text-grey-7' }, 'No matching entries found. Please refine the filter.')
 
       return h(QList, {
-        staticClass: 'component-api__list',
-        props: {
-          separator: true
-        }
-      }, [
-        content
-      ])
+        class: 'component-api__list',
+        separator: true
+      }, {
+        default: () => content
+      })
     }
-  },
 
-  render (h) {
-    return this.__render(h)
+    function render () {
+      return __render()
+    }
+
+    return () => render()
   }
-}
+})

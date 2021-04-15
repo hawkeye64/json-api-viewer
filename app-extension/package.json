@@ -1,6 +1,6 @@
 {
   "name": "quasar-app-extension-json-api-viewer",
-  "version": "1.3.0",
+  "version": "2.0.0-alpha.3",
   "description": "A Quasar App Extension for viewing JSON API",
   "author": "Jeff Galbraith <jeff@quasar.dev>",
   "license": "MIT",
@@ -29,7 +29,7 @@
     "viewer"
   ],
   "dependencies": {
-    "quasar-ui-json-api-viewer": "^1.3.0"
+    "quasar-ui-json-api-viewer": "^2.0.0-alpha.3"
   },
   "devDependencies": {
     "@vue/eslint-config-standard": "^5.1.2",

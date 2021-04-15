@@ -1,0 +1,107 @@
+.q-markdown
+  position: relative
+
+  code, pre
+    font-family: Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace
+
+  pre
+    border-radius: $generic-border-radius
+    padding: 5px
+    margin: 0
+    background-size: 1.5em 1.5em
+    background-origin: content-box
+    background-attachment: local
+    max-height: inherit
+    height: inherit
+    display: block
+    overflow: auto
+    position: relative
+    font-size: 12px
+    background: $blue-grey-1
+    color: $grey-10
+    text-align: left
+    white-space: pre
+    word-spacing: normal
+    word-break: normal
+    word-wrap: normal
+    line-height: 1.5em
+    tab-size: 4
+    hyphens: none
+
+  pre code
+    border-radius: 0
+    width: max-content
+
+.token.comment,
+.token.block-comment,
+.token.prolog,
+.token.doctype,
+.token.cdata
+  color: #7D8B99
+
+.token
+  &.punctuation
+    color: #5F6364
+
+  &.important
+    font-weight: normal
+
+  &.bold
+    font-weight: bold
+
+  &.italic
+    font-style: italic
+
+  &.entity
+    cursor: help
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.function-name,
+.token.constant,
+.token.symbol,
+.token.deleted
+  color: #c92c2c
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.function,
+.token.builtin,
+.token.inserted
+  color: #2f9c0a
+
+.token.operator
+  color: #ff2211
+
+.token.entity,
+.token.url,
+.token.variable
+  color: #a67f59
+
+.token.atrule,
+.token.attr-value,
+.token.keyword,
+.token.class-name
+  color: #1990b8
+
+.token.regex,
+.token.important
+  color: #e90
+
+.language-css .token.string,
+.style .token.string
+  color: #a67f59
+  background: rgba(255, 255, 255, 0.5)
+
+.namespace
+  opacity: .7
+
+.token.tab:not(:empty):before,
+.token.cr:before,
+.token.lf:before
+  color: #e0d7d1
+

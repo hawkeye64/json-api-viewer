@@ -54,8 +54,13 @@
       "addedIn": "v1.1.0",
       "type": "Boolean",
       "category": "behavior",
-      "default": "model",
       "desc": "Turn off the default footer"
+    },
+    "no-menu": {
+      "type": "Boolean",
+      "category": "behavior",
+      "default": "model",
+      "desc": "Turn off the options menu"
     }
   },
   "slots": {
