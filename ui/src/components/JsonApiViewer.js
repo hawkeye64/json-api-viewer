@@ -14,7 +14,7 @@ import {
 // Utils
 import JsonApiList from './JsonApiList'
 import {
-  // useQuasar,
+  useQuasar,
   QBadge,
   QCard,
   QCheckbox,
@@ -81,7 +81,7 @@ export default defineComponent({
       showRemoved = ref(false),
       inputRef = ref(null),
       vm = getCurrentInstance(),
-      $q = vm.ctx.$q
+      $q = vm.proxy.$q || vm.ctx.$q || useQuasar()
 
     const __slugifiedTitle = computed(() => slugify(props.title))
 
