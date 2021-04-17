@@ -236,12 +236,13 @@ export default defineComponent({
 
       return h('div', {
         class: 'component-api__row--example',
-        innerHtml: inner
+        innerHTML: inner
       })
     }
 
     function __renderExamples (json) {
-      if (json.examples === void 0 || json.examples.length <= 0) return ''
+      if (json.examples === void 0 || json.examples.length <= 0) return
+
       return h('div', {
         class: 'component-api__row--item col-auto'
       }, {
@@ -253,16 +254,26 @@ export default defineComponent({
             class: 'component-api__row--value'
           }, {
             default: () => [
-              json.examples.map((example, index) => __renderExample(example))
+              ...json.examples.map((example, index) => __renderExample(example))
             ]
           })
         ]
       })
     }
 
+    function checkFormatting (text) {
+      return (text || '')
+        .replace(/\`(.*?)\`/g, (match, p1, p2) => {
+          return '<code class="q-markdown--token">' + p1 + '</code>'
+        })
+        .replace(/\*{2}(\w*)\*{2}/g, (match, p1, p2) => {
+          return '<strong>' + p1 + '</strong>'
+        })
+    }
+
     function __renderDesc (json) {
       if (json.desc === void 0) return
-      // const inner = highlight(json.desc, 'md')
+      const inner = checkFormatting(json.desc)
 
       return h('div', {
         class: 'component-api__row--item full-width'
@@ -276,8 +287,8 @@ export default defineComponent({
           }, {
             default: () => [
               h('div', {
-                // innerHTML: inner
-              }, json.desc)
+                innerHTML: inner
+              })
             ]
           })
         ]
