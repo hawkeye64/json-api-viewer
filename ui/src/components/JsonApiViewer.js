@@ -285,7 +285,7 @@ export default defineComponent({
 
     function __renderTitle () {
       return h(QToolbarTitle, {
-        class: props.noAnchor !== true ? 'example-title' : '',
+        class: props.noAnchor !== true ? 'text-subtitle1 component-api__title' : '',
         onClick: copyHeading
       }, {
         default: () => h('span', {
