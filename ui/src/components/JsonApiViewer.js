@@ -65,7 +65,6 @@ export default defineComponent({
 
   setup (props, { slots }) {
     const
-      // $q = useQuasar(),
       ready = ref(false),
       currentTab = ref('props'),
       currentInnerTab = ref('model'),
@@ -84,11 +83,7 @@ export default defineComponent({
       vm = getCurrentInstance(),
       $q = vm.ctx.$q
 
-    console.log('vm', vm)
-
     const __slugifiedTitle = computed(() => slugify(props.title))
-
-    // const __headings = computed(() => tabs.value)
 
     watch(() => filter.value, () => {
       __parseJson(props.json)
@@ -332,7 +327,6 @@ export default defineComponent({
           }),
           $q.screen.width >= 385 && __renderFilter(),
           props.noMenu !== true && __renderMenu()
-          // __renderMenu()
         ]
       })
     }
@@ -424,7 +418,6 @@ export default defineComponent({
     }
 
     function __renderTabSlot (label, count, stretch) {
-      console.log('label', label, count, stretch)
       return h('div', {
         class: 'row no-wrap items-center self-stretch q-pr-sm' + (stretch ? ' justify-between' : ''),
         style: {
@@ -453,7 +446,6 @@ export default defineComponent({
     }
 
     function __renderTabPanel () {
-      console.log('filteredApi', filteredApi)
       return [...Object.keys(tabs.value)
         .map(propKey => h(QTabPanel, {
           key: propKey + '-panel',
