@@ -58,8 +58,14 @@ export default defineComponent({
       default: 'Vue Component'
     },
     noMenu: Boolean,
-    startingTab: String,
-    startingInnerTab: String,
+    startingTab: {
+      type: String,
+      default: null
+    },
+    startingInnerTab: {
+      type: String,
+      default: null
+    },
     noFooter: Boolean
   },
 
