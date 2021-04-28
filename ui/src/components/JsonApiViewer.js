@@ -37,7 +37,8 @@ import {
 // utils
 import { copyHeading, slugify } from '../utils/utils.js'
 
-import { version } from '../../package.json'
+import pkg from '../../package.json'
+const { version } = pkg
 
 export default defineComponent({
   name: 'JsonApiViewer',

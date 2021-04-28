@@ -1,6 +1,6 @@
 import Component from './components/JsonApiViewer.js'
-
-const version = __UI_VERSION__
+import pkg from '../package.json'
+const { version } = pkg
 
 function install (app) {
   app.component(Component.name, Component)
