@@ -263,7 +263,7 @@ export default defineComponent({
 
     function checkFormatting (text) {
       return (text || '')
-        .replace(/\`(.*?)\`/g, (match, p1) => {
+        .replace(/`(.*?)`/g, (match, p1) => {
           return '<code class="q-markdown--token">' + p1 + '</code>'
         })
         .replace(/\*{2}(\w*)\*{2}/g, (match, p1, p2) => {
