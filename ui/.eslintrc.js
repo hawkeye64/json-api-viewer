@@ -27,8 +27,7 @@ module.exports = {
     'plugin:vue/vue3-essential', // Priority A: Essential (Error Prevention)
     // 'plugin:vue/vue3-strongly-recommended', // Priority B: Strongly Recommended (Improving Readability)
     // 'plugin:vue/vue3-recommended', // Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)
-
-    'standard'
+    'plugin:promise/recommended'
   ],
 
   plugins: [
@@ -38,20 +37,19 @@ module.exports = {
   ],
 
   globals: {
-    Prism: true,
-    $q: true,
-    $router: true,
-    ga: true, // Google Analytics
-    cordova: true,
-    __statics: true,
-    __UI_VERSION__: true,
-    __QUASAR_SSR__: true,
-    __QUASAR_SSR_SERVER__: true,
-    __QUASAR_SSR_CLIENT__: true,
-    __QUASAR_SSR_PWA__: true,
-    process: true,
-    Capacitor: true,
-    chrome: true
+    Prism: 'readony',
+    $q: 'readonly',
+    $router: 'readonly',
+    ga: 'readonly', // Google Analytics
+    cordova: 'readonly',
+    __statics: 'readonly',
+    __QUASAR_SSR__: 'readonly',
+    __QUASAR_SSR_SERVER__: 'readonly',
+    __QUASAR_SSR_CLIENT__: 'readonly',
+    __QUASAR_SSR_PWA__: 'readonly',
+    process: 'readonly',
+    Capacitor: 'readonly',
+    chrome: 'readonly',
   },
 
   // add your custom rules here
@@ -68,7 +66,7 @@ module.exports = {
     'one-var': 'off',
     'no-void': 'off',
     'no-lone-blocks': 'error',
-    'no-unused-expressions': 'error',
+    'no-unused-expressions': [ 'error', { allowTernary: true, "allowShortCircuit": true } ],
     'no-useless-concat': 'error',
     'no-useless-return': 'error',
     'no-unneeded-ternary': 'error',
